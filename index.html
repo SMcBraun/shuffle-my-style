@@ -53,10 +53,29 @@
       WHY WE NEED IT: Sets up the page layout from the wireframe.
       LEARNING GAP: id="add-item" gives JavaScript a name to find this spot.
     -->
-    <section id="add-item">
+        <section id="add-item">
       <h2>Add to My Closet</h2>
+      <!--
+        PLAIN ENGLISH: The quick form: pick a bin, pick a color, click Add.
+        LOGIC: The dropdown options are filled in by JavaScript (fillBinOptions).
+        WHY WE NEED IT: Card "Build item-card form (bin + color)."
+        LEARNING GAP: Each label's "for" must match its input's "id." That lets
+               screen readers announce the right label.
+      -->
+      <form id="item-form">
+        <label for="item-bin">Bin</label>
+        <select id="item-bin" name="itemBin" required>
+          <option value="">Choose a bin</option>
+        </select>
+
+        <label for="item-color">Color</label>
+        <input type="color" id="item-color" name="itemColor" value="#ff6f61">
+
+        <button type="submit">Add Item</button>
+      </form>
     </section>
 
+    
     <!--
       PLAIN ENGLISH: Where the clothes show up, grouped into 6 bins.
       LOGIC: JavaScript will fill this area from saved data.
