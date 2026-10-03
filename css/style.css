@@ -1,0 +1,104 @@
+/*
+  PLAIN ENGLISH: The app's color and font "palette," saved in one place.
+  LOGIC: CSS variables (--name) store a value once and reuse it everywhere.
+  WHY WE NEED IT: To change coral to another color, you edit ONE line, not 20.
+  LEARNING GAP: Variables go inside :root so the whole page can use them.
+         You use them with var(--coral).
+*/
+:root {
+    --coral: #ff6f61;
+    --turquoise: #1fb5ad;
+    --sunny: #ffd23f;
+    --dark: #2b2b2b;
+    --light: #fffaf3;
+    --heading-font: "Poppins", Arial, sans-serif;
+    --body-font: "Open Sans", Arial, sans-serif;
+}
+
+/*
+  PLAIN ENGLISH: Basic settings for the whole page.
+  LOGIC: box-sizing makes width include padding, so boxes don't overflow.
+  WHY WE NEED IT: Keeps the layout from breaking on small phone screens.
+  LEARNING GAP: The * means "every element."
+*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--body-font);
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+/*
+  PLAIN ENGLISH: Headings use Poppins (fun and bold), per the proposal.
+  LOGIC: One rule covers h1 and h2.
+  WHY WE NEED IT: A consistent look across both screens.
+  LEARNING GAP: Arial is the backup if Google Fonts doesn't load.
+*/
+h1,
+h2 {
+    font-family: var(--heading-font);
+}
+
+/*
+  PLAIN ENGLISH: The coral header bar with the app name and menu.
+  LOGIC: Flexbox stacks the items on phones (mobile first).
+  WHY WE NEED IT: Matches the phone wireframe.
+  LEARNING GAP: Mobile first = style for phones first, then add desktop rules below.
+*/
+header {
+    background-color: var(--coral);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 0.5rem;
+}
+
+nav a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 0.75rem;
+}
+
+nav a[aria-current="page"] {
+    border-bottom: 3px solid var(--sunny);
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+footer {
+    background-color: var(--turquoise);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/*
+  PLAIN ENGLISH: On bigger screens (desktop), put the menu beside the title.
+  LOGIC: A media query only runs when the screen is 700px wide or more.
+  WHY WE NEED IT: Matches the desktop wireframe.
+  LEARNING GAP: min-width = "this wide OR WIDER." That's the mobile-first pattern.
+*/
+@media (min-width: 700px) {
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+}

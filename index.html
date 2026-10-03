@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    PLAIN ENGLISH: Settings the browser reads before showing the page.
+    LOGIC: charset = letters display right. viewport = fits phone screens.
+    WHY WE NEED IT: Without viewport, the page looks tiny on a phone.
+    LEARNING GAP: Nothing in <head> shows on the page. It's behind-the-scenes setup.
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shuffle My Style mixes clothes you already own into new outfits.">
+  <title>Shuffle My Style | My Closet</title>
+
+  <!--
+    PLAIN ENGLISH: Load the fonts from the proposal (Poppins and Open Sans).
+    LOGIC: Google Fonts sends the font files to the browser.
+    WHY WE NEED IT: Matches the fun, bright look planned in the proposal.
+    LEARNING GAP: The font won't show unless the CSS also names it (font-family).
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <!--
+    PLAIN ENGLISH: Connect our own stylesheet.
+    LOGIC: The browser reads css/style.css for colors and layout.
+    WHY WE NEED IT: Keeps the look separate from the content.
+    LEARNING GAP: The path is relative. "css/style.css" means "the css folder next to this file."
+  -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!--
+    PLAIN ENGLISH: The top of every page: app name and menu.
+    LOGIC: <nav> holds links to the two screens from the wireframe.
+    WHY WE NEED IT: Lets the user move between My Closet and Shuffle.
+    LEARNING GAP: shuffle.html gets built in Week 6. The link is ready ahead of time.
+  -->
+  <header>
+    <h1>Shuffle My Style</h1>
+    <nav>
+      <a href="index.html" aria-current="page">My Closet</a>
+      <a href="shuffle.html">Shuffle</a>
+    </nav>
+  </header>
+
+  <main>
+    <!--
+      PLAIN ENGLISH: Where the add-item form goes (bin + color).
+      LOGIC: Empty for now. Filled in by the "Build item-card form" card.
+      WHY WE NEED IT: Sets up the page layout from the wireframe.
+      LEARNING GAP: id="add-item" gives JavaScript a name to find this spot.
+    -->
+    <section id="add-item">
+      <h2>Add to My Closet</h2>
+    </section>
+
+    <!--
+      PLAIN ENGLISH: Where the clothes show up, grouped into 6 bins.
+      LOGIC: JavaScript will fill this area from saved data.
+      WHY WE NEED IT: This is the "Show closet by bin" card.
+      LEARNING GAP: The HTML stays empty. JavaScript builds the items, like the product list in SleepOutside.
+    -->
+    <section id="closet">
+      <h2>My Closet</h2>
+      <div id="closet-bins"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Sina McBraun | WDD 330 Final Project</p>
+  </footer>
+
+  <!--
+    PLAIN ENGLISH: Start the JavaScript.
+    LOGIC: type="module" lets main.js import from closet.mjs and storage.mjs.
+    WHY WE NEED IT: Without type="module", import/export gives an error.
+    LEARNING GAP: Modules only work through a server (Five Server or GitHub Pages), not by double-clicking the file.
+  -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
