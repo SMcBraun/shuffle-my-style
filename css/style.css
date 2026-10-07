@@ -4,12 +4,15 @@
   WHY WE NEED IT: To change coral to another color, you edit ONE line, not 20.
   LEARNING GAP: Variables go inside :root so the whole page can use them.
          You use them with var(--coral).
+         --muted is the ONE gray for softer text. At #555 it is still dark enough to read
+         easily (contrast 7.4 to 1 on white; the accessibility minimum is 4.5 to 1).
 */
 :root {
     --coral: #ff6f61;
     --turquoise: #1fb5ad;
     --sunny: #ffd23f;
     --dark: #2b2b2b;
+    --muted: #555;
     --light: #fffaf3;
     --border-soft: #efe6db;
     --heading-font: "Poppins", Arial, sans-serif;
@@ -323,9 +326,17 @@ footer {
     outline-offset: 3px;
 }
 
+/*
+  PLAIN ENGLISH: The "No items yet." message inside an empty bin.
+  LOGIC: The darker --muted gray and semi-bold weight. No italics.
+  WHY WE NEED IT: The old light gray italic text blended into the white card and was easy to miss.
+  LEARNING GAP: Thin, light, slanted text is the hardest kind to read. Bolder and upright
+         reads faster, especially for people with low vision.
+  WHERE THE DATA COMES FROM: No data. closet.mjs adds the "empty" class when a bin has 0 items.
+*/
 .empty {
-    color: #666;
-    font-style: italic;
+    color: var(--muted);
+    font-weight: 600;
 }
 
 @media (min-width: 700px) {
@@ -383,10 +394,16 @@ footer {
     letter-spacing: -0.01em;
 }
 
+/*
+  PLAIN ENGLISH: The "Mix the clothes you already own..." line under the heading.
+  LOGIC: Uses the --muted gray so it's softer than the heading but still easy to read.
+  WHY WE NEED IT: Tells new users what the page does.
+  LEARNING GAP: "Softer" should mean a darker gray, not a faint one. Faint text fails accessibility.
+*/
 #shuffle-controls p {
     max-width: 30rem;
     margin: 0 auto 2rem;
-    color: #666;
+    color: var(--muted);
     font-size: 1.05rem;
     line-height: 1.6;
 }
@@ -465,22 +482,37 @@ footer {
 }
 
 /*
-  PLAIN ENGLISH: Before the first shuffle, show a calm, elegant "waiting" box.
+  PLAIN ENGLISH: The message box in the outfit area: "Click Shuffle to see 3 outfits" before the
+         first shuffle, or "Add at least one item to..." when the closet is missing clothes.
   LOGIC: "#outfit-list .empty" only targets the message INSIDE the outfit area.
          grid-column: 1 / -1 lets it stretch across all 3 columns.
+         Charcoal text, bold, and a little bigger so it's the first thing the eye lands on.
+         The pale sunny background, charcoal outline, and sunny "retro pop" shadow match the
+         .outfit-note box AND the Shuffle button, so every message looks like part of the brand:
+         yellow box = "read me."
   WHY WE NEED IT: Empty screens look broken. A styled empty state looks intentional.
+         The old light gray (#888) failed accessibility contrast (3.5 to 1, below the 4.5 minimum)
+         and was easy to miss, which matters most when the message tells the user how to fix a problem.
+         A background color makes the message stand apart from the white outfit cards.
   LEARNING GAP: The closet's "No items yet." uses .empty too. Adding #outfit-list in front
          keeps this style from changing the closet page.
+         Using the SAME look for every message teaches the user a pattern. After seeing it once,
+         they know any yellow box is something to read.
+  WHERE THE DATA COMES FROM: No data. The text comes from shuffle.html (before shuffling)
+         or from shuffle.mjs (the missing-clothes message).
 */
 #outfit-list .empty {
     grid-column: 1 / -1;
     margin: 0;
     padding: 3rem 1rem;
     text-align: center;
-    color: #888;
-    background-color: white;
-    border: 1px solid var(--border-soft);
+    color: var(--dark);
+    font-size: 1.1rem;
+    font-weight: 700;
+    background-color: #fff6d6;
+    border: 1.5px solid var(--dark);
     border-radius: 1.25rem;
+    box-shadow: 4px 4px 0 var(--sunny);
 }
 
 /*
@@ -553,6 +585,8 @@ footer {
   WHY WE NEED IT: The same boutique-style lettering as the Shuffle button.
   LEARNING GAP: A <legend> is the title for a <fieldset>. Screen readers read it
          before each checkbox, like "Add accessories, Hat, checkbox."
+         The old #777 gray was just under the 4.5 to 1 contrast minimum, so it now uses --muted,
+         and the weight went up to 700 because small text needs extra boldness to stand out.
 */
 #accessory-picks legend {
     width: 100%;
@@ -560,11 +594,11 @@ footer {
     margin-bottom: 0.75rem;
     text-align: center;
     font-family: var(--heading-font);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #777;
+    color: var(--muted);
 }
 
 /*
@@ -695,10 +729,18 @@ footer {
     font-weight: 600;
 }
 
+/*
+  PLAIN ENGLISH: The color code (like #ff6f61) on the right side of each outfit piece.
+  LOGIC: --muted gray and semi-bold, slightly bigger than before.
+  WHY WE NEED IT: The old #888 gray failed contrast and nearly disappeared on the white card.
+  LEARNING GAP: Small text needs MORE contrast, not less, because there's less ink for the eye to catch.
+  WHERE THE DATA COMES FROM: The color the user picked on the closet page, saved in localStorage.
+*/
 .piece-color {
     margin-left: auto;
-    color: #888;
-    font-size: 0.85rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 /*
@@ -717,18 +759,31 @@ footer {
 /* ==================== OUTFIT NOTE ==================== */
 
 /*
-  PLAIN ENGLISH: The small note under the cards when fewer than 3 outfits are possible.
+  PLAIN ENGLISH: The note under the cards when fewer than 3 outfits are possible.
+         It now sits in a pale sunny box with bold charcoal text, like a sticky note.
   LOGIC: grid-column: 1 / -1 stretches it across all 3 columns so it sits below the cards.
-         Centered, gray, and italic, so it reads as a gentle tip, not an error.
-  WHY WE NEED IT: Explains why there are fewer than 3 cards.
-  LEARNING GAP: The note is made by JavaScript (renderOutfits), but CSS still styles it
-         by class name (.outfit-note).
+         The pale yellow (#fff6d6) is the same color as a checked accessory pill. The charcoal
+         outline and the sunny shadow (4px 4px 0) are the same "retro pop" as the Shuffle and
+         Add Item buttons, so the note looks dressed up and on-brand.
+  WHY WE NEED IT: Explains why there are fewer than 3 cards. Before, it was gray italic text
+         floating on the background and easy to overlook. A highlighted box catches the eye
+         without looking like a red error.
+  LEARNING GAP: Yellow means "heads up" and red means "error." Using the right color tells the user
+         how serious the message is before they even read it.
+         This box has NO hover lift like the buttons, on purpose. Movement says "click me,"
+         and the note isn't clickable.
   WHERE THE DATA COMES FROM: No data. This only styles the note shuffle.mjs builds.
 */
 .outfit-note {
     grid-column: 1 / -1;
     margin: 0;
+    padding: 0.9rem 1.25rem;
     text-align: center;
-    color: #666;
-    font-style: italic;
+    color: var(--dark);
+    font-size: 1.05rem;
+    font-weight: 700;
+    background-color: #fff6d6;
+    border: 1.5px solid var(--dark);
+    border-radius: 1rem;
+    box-shadow: 4px 4px 0 var(--sunny);
 }
