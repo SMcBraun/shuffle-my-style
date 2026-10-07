@@ -787,3 +787,27 @@ footer {
     border-radius: 1rem;
     box-shadow: 4px 4px 0 var(--sunny);
 }
+
+/* ==================== COLORING BOOK DRAWING ==================== */
+
+/*
+  PLAIN ENGLISH: The coloring-book picture at the top of each outfit card.
+  LOGIC: display: block and margin auto center it. width: 100% with max-width keeps it
+         from getting too big on desktop, and height: auto keeps its shape (no stretching).
+         A soft cream oval behind the figure, like a mirror, frames it on the white card.
+         border-radius: 50% makes an oval here because the drawing is taller than it is wide.
+  WHY WE NEED IT: Card "Draw coloring book outfit." The drawing is the first thing the eye sees.
+  LEARNING GAP: An SVG with a viewBox scales to ANY size with no blur, because it's shapes,
+         not pixels. That's why one drawing works on a phone and a big desktop screen.
+  WHERE THE DATA COMES FROM: No data. This only sizes the SVG that outfit-drawing.mjs builds.
+*/
+.outfit-drawing {
+    display: block;
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    margin: 0 auto 1.25rem;
+    padding: 0.75rem;
+    background-color: var(--light);
+    border-radius: 50%;
+}

@@ -1,4 +1,5 @@
 import { getCloset } from "./storage.mjs";
+import { drawOutfit } from "./outfit-drawing.mjs";
 
 /*
   PLAIN ENGLISH: The three bins every outfit must have.
@@ -159,12 +160,13 @@ export function buildOutfits(accessoryBins) {
 
 /*
   PLAIN ENGLISH: Show the outfits on the page as cards.
-  LOGIC: Clear the area, then for each outfit make a card with a title ("Outfit 1")
-         and a list of pieces: a color circle, the bin name, and the color code.
-         If there are fewer than 3 outfits, add a short note explaining why.
-  WHY WE NEED IT: The user SEES their outfits. The coloring-book drawing joins these cards later.
+  LOGIC: Clear the area, then for each outfit make a card with a title ("Outfit 1"),
+         the coloring-book drawing, and a list of pieces: a color circle, the bin name,
+         and the color code. If there are fewer than 3 outfits, add a short note explaining why.
+  WHY WE NEED IT: The user SEES their outfits, first as a picture, then as exact colors.
   LEARNING GAP: We use textContent, not innerHTML, for text. It's safer, the same as renderCloset.
          The color circle reuses your .swatch class from the closet page, so no new CSS is needed for it.
+         drawOutfit lives in its own file (outfit-drawing.mjs). This function just places the picture.
   WHERE THE DATA COMES FROM: The outfits made by buildOutfits.
 */
 export function renderOutfits(container, outfits) {
@@ -177,6 +179,15 @@ export function renderOutfits(container, outfits) {
         const heading = document.createElement("h3");
         heading.textContent = `Outfit ${index + 1}`;
         card.appendChild(heading);
+
+        /*
+          PLAIN ENGLISH: Add the coloring-book drawing under the "Outfit 1" title.
+          LOGIC: drawOutfit builds the picture from this outfit's colors and hands it back.
+                 appendChild puts it in the card BEFORE the list, so the picture comes first.
+          WHY WE NEED IT: Card "Draw coloring book outfit."
+          LEARNING GAP: Order matters. Whatever is appended first shows higher on the card.
+        */
+        card.appendChild(drawOutfit(outfit));
 
         const list = document.createElement("ul");
         list.className = "outfit-pieces";
