@@ -811,3 +811,114 @@ footer {
     background-color: var(--light);
     border-radius: 50%;
 }
+
+/* ==================== COLOR API: NAMES AND COLOR MIX ==================== */
+
+/*
+  PLAIN ENGLISH: Stack the bin name ("Tops") on top of the color's name ("Bittersweet").
+  LOGIC: flex-direction: column puts the two spans one above the other.
+  WHY WE NEED IT: Card "Connect the color API." The name sits right where the eye already reads.
+  LEARNING GAP: The li is still a flex ROW (circle, label, code). Only the label inside it is a column.
+         Flexbox can be nested: a row that holds a column.
+  WHERE THE DATA COMES FROM: No data. This only styles the label shuffle.mjs builds.
+*/
+.piece-label {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+/*
+  PLAIN ENGLISH: The color's name, like "Bittersweet," in smaller gray letters.
+  LOGIC: The --muted gray and semi-bold weight, the same readable gray as the color codes.
+  WHY WE NEED IT: The name supports the bin name without competing with it.
+  LEARNING GAP: It starts as "Finding name..." and changes when The Color API answers.
+         Same spot, same style, so nothing jumps around on the card.
+  WHERE THE DATA COMES FROM: The Color API /id answer (name.value), through color-api.mjs.
+*/
+.piece-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: The "Colors that go with your top" section at the bottom of each outfit card.
+  LOGIC: A thin warm line on top separates it from the outfit pieces.
+  WHY WE NEED IT: The proposal's "creative color mixes" idea gets its own clear spot.
+  LEARNING GAP: border-top uses the same --border-soft as the cards, so it matches the chic look.
+  WHERE THE DATA COMES FROM: No data. This only styles the section shuffle.mjs builds.
+*/
+.color-mix {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-soft);
+}
+
+/*
+  PLAIN ENGLISH: The small uppercase title, "COLORS THAT GO WITH YOUR TOP."
+  LOGIC: The same boutique lettering as "ADD ACCESSORIES" and "OUTFIT 1."
+  WHY WE NEED IT: A consistent look across the whole page.
+  LEARNING GAP: It's an h4 because it sits under the card's h3 ("Outfit 1"). Headings should go
+         in order (h2, h3, h4), which helps screen reader users understand the page's outline.
+*/
+.color-mix h4 {
+    margin: 0 0 0.6rem;
+    font-family: var(--heading-font);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: The "Finding colors..." loading text, or the "try again" note if the API is down.
+  LOGIC: Readable --muted gray, semi-bold, slightly smaller text.
+  WHY WE NEED IT: The user always knows what's happening, even while waiting.
+  LEARNING GAP: A loading message is a tiny loading indicator. The example proposals planned these too.
+*/
+.color-mix-message {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: The 3 color ideas, side by side, each with a small circle and its name.
+  LOGIC: flex-wrap lets them drop to a new line on narrow phone screens instead of squishing.
+  WHY WE NEED IT: Easy to scan, and it works on phone and desktop.
+  LEARNING GAP: gap: 0.75rem 1rem means 0.75rem between ROWS and 1rem between COLUMNS.
+  WHERE THE DATA COMES FROM: No data. This only styles the list shuffle.mjs builds.
+*/
+.color-mix-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+}
+
+.color-mix-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/*
+  PLAIN ENGLISH: A smaller version of the color circle for the mix ideas.
+  LOGIC: The element has BOTH classes: "swatch swatch-small." .swatch gives the round shape and
+         outline. .swatch-small comes later in this file, so its smaller size wins.
+  WHY WE NEED IT: The mix ideas are extra tips, so their circles are smaller than the outfit's own.
+  LEARNING GAP: An element can have more than one class, separated by a space. This "modifier"
+         pattern reuses a style and changes just one thing, instead of copying the whole rule.
+*/
+.swatch-small {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-width: 1.5px;
+}
