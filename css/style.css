@@ -525,3 +525,111 @@ footer {
         transform: none;
     }
 }
+
+/* ==================== ACCESSORY CHECKBOXES ==================== */
+
+/*
+  PLAIN ENGLISH: The group of accessory choices sits centered above the Shuffle button.
+  LOGIC: The fieldset's default border is removed. Flexbox lines the pills up in a row
+         and wraps them onto a new line on small phones.
+  WHY WE NEED IT: Card "Accessory checkboxes." It keeps the hero card clean and chic.
+  LEARNING GAP: <fieldset> has a gray box border by default. border: none removes it,
+         but the grouping still works for screen readers.
+  WHERE THE DATA COMES FROM: No data. This only styles the checkboxes in shuffle.html.
+*/
+#accessory-picks {
+    border: none;
+    margin: 0 auto 2rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/*
+  PLAIN ENGLISH: The "Add accessories" title is small, uppercase, and spaced out.
+  LOGIC: width: 100% puts the title on its own line above the pills.
+  WHY WE NEED IT: The same boutique-style lettering as the Shuffle button.
+  LEARNING GAP: A <legend> is the title for a <fieldset>. Screen readers read it
+         before each checkbox, like "Add accessories, Hat, checkbox."
+*/
+#accessory-picks legend {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0.75rem;
+    text-align: center;
+    font-family: var(--heading-font);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #777;
+}
+
+/*
+  PLAIN ENGLISH: Each choice is a soft white pill with a small checkbox inside.
+  LOGIC: The label is styled as the pill, so the whole pill is clickable.
+         accent-color makes the checkmark charcoal to match the app.
+  WHY WE NEED IT: Pills look like boutique tags, which is chic and easy to tap on a phone.
+  LEARNING GAP: We KEEP the real checkbox visible instead of hiding it. That's better for
+         accessibility, because everyone can still see and use a real checkbox.
+*/
+.pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.1rem;
+    background-color: white;
+    border: 1.5px solid #e3d8cc;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.pick input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    accent-color: var(--dark);
+    cursor: pointer;
+}
+
+.pick:hover {
+    border-color: var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: When a pill is checked, it turns pale sunny yellow with a charcoal outline.
+  LOGIC: :has(input:checked) means "this label, when the checkbox inside it is checked."
+  WHY WE NEED IT: The user can see their choices at a glance, not just by the tiny checkmark.
+  LEARNING GAP: :has() lets CSS style a PARENT based on its child. Before :has(), this needed JavaScript.
+*/
+.pick:has(input:checked) {
+    background-color: #fff6d6;
+    border-color: var(--dark);
+}
+
+/*
+  PLAIN ENGLISH: A turquoise ring shows around the pill when someone uses Tab to reach it.
+  LOGIC: :has(input:focus-visible) puts the ring on the whole pill, not just the tiny box.
+  WHY WE NEED IT: Accessibility, consistent with the buttons and menu links.
+  LEARNING GAP: Keyboard users press Space to check or uncheck a focused checkbox.
+*/
+.pick:has(input:focus-visible) {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 3px;
+}
+
+/*
+  PLAIN ENGLISH: If someone turned off animations, the pills change color instantly instead of fading.
+  LOGIC: The same prefers-reduced-motion setting used for the buttons.
+  WHY WE NEED IT: Respects the user's device setting.
+  LEARNING GAP: It's a small detail, but it shows consistent, professional care.
+*/
+@media (prefers-reduced-motion: reduce) {
+    .pick {
+        transition: none;
+    }
+}

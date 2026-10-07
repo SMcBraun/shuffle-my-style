@@ -34,7 +34,7 @@
 
   <!--
     PLAIN ENGLISH: The same top section and menu as the closet page.
-    LOGIC: aria-current="page" now sits on the Shuffle link, because this is the Shuffle page.
+    LOGIC: aria-current="page" sits on the Shuffle link, because this is the Shuffle page.
     WHY WE NEED IT: The user can move back to My Closet. Screen readers announce which page they're on.
     LEARNING GAP: aria-current moves to whichever page you're on. It's not always on the first link.
   -->
@@ -48,16 +48,36 @@
 
   <main>
     <!--
-      PLAIN ENGLISH: The control area: short directions and the Shuffle button.
+      PLAIN ENGLISH: The control area: short directions, accessory choices, and the Shuffle button.
       LOGIC: id="shuffle-controls" names this area. id="shuffle-btn" names the button for JavaScript.
       WHY WE NEED IT: Card "Build Shuffle Screen." This is the button from the wireframe.
       LEARNING GAP: type="button" means it does nothing on its own. It won't submit or reload.
              JavaScript gives it a job in the "Shuffles picks 3 outfits" card.
-             The Hat/Bag/Accent checkboxes will go in this section (next card).
     -->
     <section id="shuffle-controls">
       <h2>Shuffle an Outfit</h2>
       <p>Mix the clothes you already own into 3 new outfits.</p>
+
+      <!--
+        PLAIN ENGLISH: Three checkboxes so the user picks which extras to add: Hat, Bag, Accent.
+        LOGIC: <fieldset> groups the checkboxes. <legend> is the group's title.
+               Each checkbox sits INSIDE its <label>, so clicking the word also checks the box.
+               name="accessory" gives all three the same group name for JavaScript to find.
+        WHY WE NEED IT: Card "Accessory checkboxes (Hat, Bags, Accent)." Tops, bottoms, and shoes
+               are always in an outfit. Accessories are the user's choice (function #9 in the proposal).
+        LEARNING GAP: Each value MUST match a bin name in closet.mjs exactly ("Hats", "Bags", "Accents").
+               The label the user sees can say "Hat," but the value is what the shuffle will use
+               to find those clothes. A spelling mismatch means that accessory never shows up.
+               All three start unchecked. Adding the word "checked" to an input would pre-check it.
+        WHERE THE DATA COMES FROM: The user's clicks. The next card reads which boxes are checked.
+      -->
+      <fieldset id="accessory-picks">
+        <legend>Add accessories</legend>
+        <label class="pick"><input type="checkbox" name="accessory" value="Hats"> Hat</label>
+        <label class="pick"><input type="checkbox" name="accessory" value="Bags"> Bag</label>
+        <label class="pick"><input type="checkbox" name="accessory" value="Accents"> Accent</label>
+      </fieldset>
+
       <button type="button" id="shuffle-btn">Shuffle</button>
     </section>
 
