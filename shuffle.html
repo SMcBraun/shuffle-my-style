@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    PLAIN ENGLISH: Settings the browser reads before showing the page.
+    LOGIC: Same setup as index.html, with a title and description for this screen.
+    WHY WE NEED IT: Every page needs its own <head>. Pages don't share one.
+    LEARNING GAP: The <title> is what shows on the browser tab, so each page gets its own.
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shuffle My Style picks 3 new outfits from clothes already in your closet.">
+  <title>Shuffle My Style | Shuffle</title>
+
+  <!--
+    PLAIN ENGLISH: Load the same fonts as the closet page (Poppins and Open Sans).
+    LOGIC: Google Fonts sends the font files to the browser.
+    WHY WE NEED IT: Both screens look like one app.
+    LEARNING GAP: Each HTML page must load the fonts itself. index.html loading them doesn't carry over.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <!--
+    PLAIN ENGLISH: Use the same stylesheet as the closet page.
+    LOGIC: One style.css is shared by both pages.
+    WHY WE NEED IT: Change a color once and both screens update.
+    LEARNING GAP: We are NOT making a second CSS file. Sharing one keeps the pages consistent.
+  -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!--
+    PLAIN ENGLISH: The same top section and menu as the closet page.
+    LOGIC: aria-current="page" now sits on the Shuffle link, because this is the Shuffle page.
+    WHY WE NEED IT: The user can move back to My Closet. Screen readers announce which page they're on.
+    LEARNING GAP: aria-current moves to whichever page you're on. It's not always on the first link.
+  -->
+  <header>
+    <h1>Shuffle My Style</h1>
+    <nav>
+      <a href="index.html">My Closet</a>
+      <a href="shuffle.html" aria-current="page">Shuffle</a>
+    </nav>
+  </header>
+
+  <main>
+    <!--
+      PLAIN ENGLISH: The control area: short directions and the Shuffle button.
+      LOGIC: id="shuffle-controls" names this area. id="shuffle-btn" names the button for JavaScript.
+      WHY WE NEED IT: Card "Build Shuffle Screen." This is the button from the wireframe.
+      LEARNING GAP: type="button" means it does nothing on its own. It won't submit or reload.
+             JavaScript gives it a job in the "Shuffles picks 3 outfits" card.
+             The Hat/Bag/Accent checkboxes will go in this section (next card).
+    -->
+    <section id="shuffle-controls">
+      <h2>Shuffle an Outfit</h2>
+      <p>Mix the clothes you already own into 3 new outfits.</p>
+      <button type="button" id="shuffle-btn">Shuffle</button>
+    </section>
+
+    <!--
+      PLAIN ENGLISH: The spot where the 3 outfits will show up.
+      LOGIC: The HTML stays mostly empty. JavaScript will fill #outfit-list.
+      WHY WE NEED IT: The wireframe shows 3 outfits, stacked on phone and side by side on desktop.
+      LEARNING GAP: It's the same idea as #closet-bins on the closet page.
+             The message below shows until the first shuffle replaces it.
+    -->
+    <section id="outfits">
+      <h2>Your Outfits</h2>
+      <div id="outfit-list">
+        <p class="empty">Click Shuffle to see 3 outfits.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Sina McBraun | WDD 330 Final Project</p>
+  </footer>
+
+  <!--
+    PLAIN ENGLISH: The JavaScript line for this page gets added later.
+    LOGIC: It will point to its own starter file, so it doesn't mix with the closet page's main.js.
+    WHY WE NEED IT: Keeps the two pages separate, the way you asked.
+    LEARNING GAP: Linking a file that doesn't exist yet causes a console error, so we wait.
+  -->
+</body>
+</html>

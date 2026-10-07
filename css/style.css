@@ -11,6 +11,7 @@
     --sunny: #ffd23f;
     --dark: #2b2b2b;
     --light: #fffaf3;
+    --border-soft: #efe6db;
     --heading-font: "Poppins", Arial, sans-serif;
     --body-font: "Open Sans", Arial, sans-serif;
 }
@@ -44,31 +45,85 @@ h2 {
 }
 
 /*
-  PLAIN ENGLISH: The coral header bar with the app name and menu.
-  LOGIC: Flexbox stacks the items on phones (mobile first).
-  WHY WE NEED IT: Matches the phone wireframe.
-  LEARNING GAP: Mobile first = style for phones first, then add desktop rules below.
+  PLAIN ENGLISH: The header is a clean white bar with a thin warm line underneath.
+  LOGIC: White background, charcoal text, and a 1px border at the bottom.
+  WHY WE NEED IT: The chic "Sunny chic" look. Coral is saved for small accents, not the whole bar.
+  LEARNING GAP: Mobile first: everything is centered and stacked on phones.
+         The desktop media query below puts the menu beside the title.
 */
 header {
-    background-color: var(--coral);
-    color: white;
+    background-color: white;
+    color: var(--dark);
     padding: 1rem;
     text-align: center;
+    border-bottom: 1px solid var(--border-soft);
 }
 
+/*
+  PLAIN ENGLISH: The app name with three color dots in front of it, like a mini logo.
+  LOGIC: The h1 becomes a flex row so the dots and the words line up in the middle.
+         ::before makes ONE coral dot. box-shadow makes turquoise and sunny copies to its right.
+         margin-right leaves room for those two copies before the words start.
+  WHY WE NEED IT: The dots are the app's "logo." They match the dots on the Shuffle page.
+  LEARNING GAP: box-shadow copies don't take up space, so margin-right must make room for them.
+         Without it, the dots would sit on top of the letters.
+*/
 header h1 {
     margin: 0 0 0.5rem;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+header h1::before {
+    content: "";
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin-right: 44px;
+    border-radius: 50%;
+    background-color: var(--coral);
+    box-shadow: 15px 0 0 var(--turquoise), 30px 0 0 var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: Menu links are charcoal. Hovering shows a sunny underline.
+         The page you're on keeps a coral underline.
+  LOGIC: Every link has an invisible (transparent) bottom border. Hover and
+         aria-current only change its COLOR, so the text never jumps.
+  WHY WE NEED IT: Shows where you are and what's clickable, in a calm way.
+  LEARNING GAP: The aria-current rule comes AFTER the hover rule on purpose. When two rules
+         are equally strong, the later one wins, so the current page stays coral on hover.
+*/
 nav a {
-    color: white;
+    color: var(--dark);
+    font-family: var(--heading-font);
     font-weight: 600;
     text-decoration: none;
     margin: 0 0.75rem;
+    padding-bottom: 2px;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+nav a:hover {
+    border-bottom-color: var(--sunny);
 }
 
 nav a[aria-current="page"] {
-    border-bottom: 3px solid var(--sunny);
+    border-bottom-color: var(--coral);
+}
+
+/*
+  PLAIN ENGLISH: A turquoise ring shows on a menu link when someone uses the Tab key.
+  LOGIC: :focus-visible shows it for keyboard users only.
+  WHY WE NEED IT: Accessibility, the same rule as the buttons (Week 7 card).
+  LEARNING GAP: Links need focus styles too, not just buttons.
+*/
+nav a:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 4px;
 }
 
 main {
@@ -77,11 +132,20 @@ main {
     padding: 1rem;
 }
 
+/*
+  PLAIN ENGLISH: The footer is charcoal with cream text, like a boutique sign.
+  LOGIC: Dark background, light text, slightly smaller letters.
+  WHY WE NEED IT: Frames the bottom of the page and balances the white header.
+  LEARNING GAP: Cream (--light) on charcoal (--dark) is easy to read. It's high contrast,
+         which is good for accessibility.
+*/
 footer {
-    background-color: var(--turquoise);
-    color: white;
+    background-color: var(--dark);
+    color: var(--light);
     text-align: center;
-    padding: 1rem;
+    padding: 1.25rem 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
 }
 
 /*
@@ -102,6 +166,8 @@ footer {
         margin: 0;
     }
 }
+
+/* ==================== CLOSET PAGE ==================== */
 
 /*
   PLAIN ENGLISH: Style the add-item form.
@@ -136,12 +202,47 @@ footer {
     cursor: pointer;
 }
 
+/*
+  PLAIN ENGLISH: The Add Item button is a charcoal pill with the sunny "shadow" behind it.
+  LOGIC: box-shadow 4px 4px 0 = shift right 4px, down 4px, with 0 blur, so the edge is crisp.
+         margin-top gives it a little space from the color picker.
+  WHY WE NEED IT: It matches the Shuffle button's retro pop, so both pages feel like one app.
+  LEARNING GAP: Charcoal here (and coral on Shuffle) makes each page's main button stand out
+         against its own background, while the sunny shadow ties them together.
+*/
 #item-form button {
-    background-color: var(--sunny);
-    color: var(--dark);
-    border: none;
+    margin-top: 0.5rem;
+    background-color: var(--dark);
+    color: white;
+    border: 1.5px solid var(--dark);
+    font-family: var(--heading-font);
     font-weight: 600;
+    letter-spacing: 0.08em;
     cursor: pointer;
+    box-shadow: 4px 4px 0 var(--sunny);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/*
+  PLAIN ENGLISH: Hover lifts the button. Clicking presses it into its shadow.
+  LOGIC: The same movement as the Shuffle button, so the app behaves the same everywhere.
+  WHY WE NEED IT: Consistent "feel" is part of a professional design.
+  LEARNING GAP: :active also works on phones when the button is tapped.
+*/
+#item-form button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--sunny);
+}
+
+#item-form button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--sunny);
+}
+
+#item-form button:focus-visible,
+#item-form select:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 4px;
 }
 
 /*
@@ -159,15 +260,16 @@ footer {
 
 .bin {
     background-color: white;
+    border: 1px solid var(--border-soft);
     border-radius: 1rem;
     padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 8px 20px rgba(43, 43, 43, 0.04);
 }
 
 .bin h3 {
     font-family: var(--heading-font);
     margin-top: 0;
-    border-bottom: 3px solid var(--coral);
+    border-bottom: 2px solid var(--coral);
     padding-bottom: 0.25rem;
 }
 
@@ -191,15 +293,34 @@ footer {
     border: 2px solid var(--dark);
 }
 
+/*
+  PLAIN ENGLISH: The Delete button is a quiet outlined pill.
+  LOGIC: Transparent background with a soft border. On hover the border turns coral.
+  WHY WE NEED IT: Delete shouldn't shout. The main buttons should be the stars.
+  LEARNING GAP: It's a good design habit to make "destructive" actions calmer, so people
+         don't click them by accident.
+*/
 .delete-btn {
     margin-left: auto;
     font: inherit;
-    background-color: var(--coral);
-    color: var(--dark);
-    border: none;
+    font-size: 0.85rem;
+    background-color: transparent;
+    color: #555;
+    border: 1px solid #e3d8cc;
     border-radius: 999px;
     padding: 0.3rem 0.9rem;
     cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+    border-color: var(--coral);
+    color: var(--dark);
+}
+
+.delete-btn:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 3px;
 }
 
 .empty {
@@ -210,5 +331,197 @@ footer {
 @media (min-width: 700px) {
     #closet-bins {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ==================== SHUFFLE PAGE ==================== */
+
+/*
+  PLAIN ENGLISH: The top Shuffle area is a clean white card (Option B, "Sunny chic").
+  LOGIC: White background, thin warm border, and a very soft shadow make it float quietly.
+         Text is centered so the eye goes straight to the button.
+  WHY WE NEED IT: Card "Build Shuffle Screen." It gives the page a classy, boutique feel.
+  LEARNING GAP: Chic design uses LESS: thin borders and faint shadows look more
+         expensive than thick borders and strong glows.
+  WHERE THE DATA COMES FROM: No data. This only styles the HTML in shuffle.html.
+*/
+#shuffle-controls {
+    background-color: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 12px 32px rgba(43, 43, 43, 0.05);
+    margin: 1rem 0 3rem;
+}
+
+/*
+  PLAIN ENGLISH: Three color dots (coral, turquoise, sunny) sit above the heading like a mini logo.
+  LOGIC: ::before makes ONE coral circle. box-shadow makes two copies of it,
+         turquoise 18px to the right and sunny 36px to the right.
+         left: -18px shifts the whole row back so all 3 dots are centered.
+  WHY WE NEED IT: The dots repeat the app's palette. It's an app about colors.
+  LEARNING GAP: ::before needs content: "" or it won't show. box-shadow with 0 blur
+         makes crisp copies of a shape, which is the same trick the button shadow uses.
+*/
+#shuffle-controls h2::before {
+    content: "";
+    display: block;
+    position: relative;
+    left: -18px;
+    width: 12px;
+    height: 12px;
+    margin: 0 auto 0.9rem;
+    border-radius: 50%;
+    background-color: var(--coral);
+    box-shadow: 18px 0 0 var(--turquoise), 36px 0 0 var(--sunny);
+}
+
+#shuffle-controls h2 {
+    margin-top: 0;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: -0.01em;
+}
+
+#shuffle-controls p {
+    max-width: 30rem;
+    margin: 0 auto 2rem;
+    color: #666;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+/*
+  PLAIN ENGLISH: The Shuffle button is a coral pill with a thin charcoal outline
+         and a sunny yellow "shadow" peeking out behind it (the retro pop).
+  LOGIC: box-shadow 4px 4px 0 = shift right 4px, down 4px, with 0 blur, so the edge is crisp.
+         Dark text sits on coral because it's easier to read than white on coral.
+  WHY WE NEED IT: It's the main action, so it catches the eye and stays classy.
+  LEARNING GAP: "font: inherit" is needed because buttons don't use the page font by default.
+         text-transform only changes the LOOK. Screen readers still read "Shuffle" normally.
+*/
+#shuffle-btn {
+    font: inherit;
+    font-family: var(--heading-font);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dark);
+    background-color: var(--coral);
+    border: 1.5px solid var(--dark);
+    border-radius: 999px;
+    padding: 0.9rem 2.75rem;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--sunny);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/*
+  PLAIN ENGLISH: On hover the button lifts and the yellow grows. On click it presses into its shadow.
+  LOGIC: Hover moves the button up-left 2px and makes the shadow bigger (6px).
+         Active moves it down-right 2px and shrinks the shadow (2px), like pushing a real button.
+  WHY WE NEED IT: The movement feels fun and happy, and it tells the user "this is clickable."
+  LEARNING GAP: :hover = mouse over it. :active = while being clicked. Phones have no hover,
+         but they DO show :active when tapped, so phone users still feel the press.
+*/
+#shuffle-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--sunny);
+}
+
+#shuffle-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: A turquoise ring appears when someone uses the Tab key to reach the button.
+  LOGIC: :focus-visible shows the ring for keyboard users only, not on every mouse click.
+  WHY WE NEED IT: Keyboard users must see where they are. This counts toward accessibility (Week 7 card).
+  LEARNING GAP: Never remove focus outlines without replacing them. It's a common beginner mistake.
+*/
+#shuffle-btn:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 6px;
+}
+
+/*
+  PLAIN ENGLISH: The outfit area: 1 column on phones, 3 side by side on desktop.
+  LOGIC: CSS grid, the same pattern as #closet-bins. The media query below adds 3 columns.
+  WHY WE NEED IT: Matches the wireframe. It's ready for the outfit cards the next cards will add.
+  LEARNING GAP: We style the area now even though it's mostly empty. The outfits
+         will drop right into this layout later.
+*/
+#outfits h2 {
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+#outfit-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/*
+  PLAIN ENGLISH: Before the first shuffle, show a calm, elegant "waiting" box.
+  LOGIC: "#outfit-list .empty" only targets the message INSIDE the outfit area.
+         grid-column: 1 / -1 lets it stretch across all 3 columns.
+  WHY WE NEED IT: Empty screens look broken. A styled empty state looks intentional.
+  LEARNING GAP: The closet's "No items yet." uses .empty too. Adding #outfit-list in front
+         keeps this style from changing the closet page.
+*/
+#outfit-list .empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #888;
+    background-color: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+}
+
+/*
+  PLAIN ENGLISH: Desktop extras: 3 outfit columns and more space in the top card.
+  LOGIC: Runs only on screens 700px wide or wider (mobile first, like the rest of the file).
+  WHY WE NEED IT: Matches the desktop wireframe.
+  LEARNING GAP: This is a separate media query just for the Shuffle page. Keeping it
+         here keeps all Shuffle styles together in one section.
+*/
+@media (min-width: 700px) {
+    #outfit-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #shuffle-controls {
+        padding: 3.5rem 2rem;
+    }
+}
+
+/* ==================== MOTION SETTINGS (BOTH PAGES) ==================== */
+
+/*
+  PLAIN ENGLISH: If someone turned off animations in their device settings, stop the movement.
+  LOGIC: prefers-reduced-motion is a setting some people use because motion makes them dizzy.
+         It covers both main buttons (Shuffle and Add Item).
+  WHY WE NEED IT: Respects the user. It's a sign of professional, accessible design.
+  LEARNING GAP: The buttons still work and keep their sunny shadows. They just don't move.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    #shuffle-btn,
+    #item-form button,
+    nav a,
+    .delete-btn {
+        transition: none;
+    }
+
+    #shuffle-btn:hover,
+    #shuffle-btn:active,
+    #item-form button:hover,
+    #item-form button:active {
+        transform: none;
     }
 }
