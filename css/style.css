@@ -633,3 +633,102 @@ footer {
         transition: none;
     }
 }
+
+/* ==================== OUTFIT CARDS ==================== */
+
+/*
+  PLAIN ENGLISH: Each outfit shows up as a clean white card, matching the closet bins.
+  LOGIC: White background, thin warm border, soft shadow, rounded corners.
+  WHY WE NEED IT: Card "Shuffles picks 3 outfits." The 3 cards sit in the #outfit-list grid
+         (stacked on phone, side by side on desktop) that we styled earlier.
+  LEARNING GAP: These cards are made by JavaScript (renderOutfits), but CSS still styles them
+         by class name (.outfit-card), the same as .bin on the closet page.
+  WHERE THE DATA COMES FROM: No data. This only styles what shuffle.mjs builds.
+*/
+.outfit-card {
+    background-color: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 8px 20px rgba(43, 43, 43, 0.04);
+}
+
+/*
+  PLAIN ENGLISH: "OUTFIT 1" titles are small, uppercase, and spaced out, with a coral line.
+  LOGIC: The same boutique lettering as the Shuffle button and the "Add accessories" title.
+  WHY WE NEED IT: A consistent, chic look across the page.
+  LEARNING GAP: text-transform only changes the LOOK. The HTML still says "Outfit 1."
+*/
+.outfit-card h3 {
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--coral);
+    font-family: var(--heading-font);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+/*
+  PLAIN ENGLISH: The pieces in each outfit are listed with a color circle, the bin, and the color code.
+  LOGIC: list-style: none removes the bullet points. Grid adds even spacing between pieces.
+         Flexbox lines up each piece in a row. margin-left: auto pushes the color code to the right.
+  WHY WE NEED IT: Easy to read at a glance.
+  LEARNING GAP: The color circle reuses the .swatch class from the closet page,
+         so it already has its size, round shape, and dark outline.
+*/
+.outfit-pieces {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.outfit-pieces li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.piece-bin {
+    font-weight: 600;
+}
+
+.piece-color {
+    margin-left: auto;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/*
+  PLAIN ENGLISH: The "Go to My Closet" link in the missing-clothes message.
+  LOGIC: Charcoal text with a coral underline, spaced slightly below the words.
+  WHY WE NEED IT: It looks like part of the app, not a default blue link.
+  LEARNING GAP: text-underline-offset moves the underline down a little, which looks more polished.
+*/
+#outfit-list .empty a {
+    color: var(--dark);
+    font-weight: 600;
+    text-decoration-color: var(--coral);
+    text-underline-offset: 3px;
+}
+
+/* ==================== OUTFIT NOTE ==================== */
+
+/*
+  PLAIN ENGLISH: The small note under the cards when fewer than 3 outfits are possible.
+  LOGIC: grid-column: 1 / -1 stretches it across all 3 columns so it sits below the cards.
+         Centered, gray, and italic, so it reads as a gentle tip, not an error.
+  WHY WE NEED IT: Explains why there are fewer than 3 cards.
+  LEARNING GAP: The note is made by JavaScript (renderOutfits), but CSS still styles it
+         by class name (.outfit-note).
+  WHERE THE DATA COMES FROM: No data. This only styles the note shuffle.mjs builds.
+*/
+.outfit-note {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}

@@ -52,7 +52,7 @@
       LOGIC: id="shuffle-controls" names this area. id="shuffle-btn" names the button for JavaScript.
       WHY WE NEED IT: Card "Build Shuffle Screen." This is the button from the wireframe.
       LEARNING GAP: type="button" means it does nothing on its own. It won't submit or reload.
-             JavaScript gives it a job in the "Shuffles picks 3 outfits" card.
+             shuffle-main.js gives it its job.
     -->
     <section id="shuffle-controls">
       <h2>Shuffle an Outfit</h2>
@@ -62,14 +62,14 @@
         PLAIN ENGLISH: Three checkboxes so the user picks which extras to add: Hat, Bag, Accent.
         LOGIC: <fieldset> groups the checkboxes. <legend> is the group's title.
                Each checkbox sits INSIDE its <label>, so clicking the word also checks the box.
-               name="accessory" gives all three the same group name for JavaScript to find.
+               All three share one group name, which JavaScript uses to find them.
         WHY WE NEED IT: Card "Accessory checkboxes (Hat, Bags, Accent)." Tops, bottoms, and shoes
                are always in an outfit. Accessories are the user's choice (function #9 in the proposal).
         LEARNING GAP: Each value MUST match a bin name in closet.mjs exactly ("Hats", "Bags", "Accents").
-               The label the user sees can say "Hat," but the value is what the shuffle will use
+               The label the user sees can say "Hat," but the value is what the shuffle uses
                to find those clothes. A spelling mismatch means that accessory never shows up.
                All three start unchecked. Adding the word "checked" to an input would pre-check it.
-        WHERE THE DATA COMES FROM: The user's clicks. The next card reads which boxes are checked.
+        WHERE THE DATA COMES FROM: The user's clicks. shuffle.mjs reads which boxes are checked.
       -->
       <fieldset id="accessory-picks">
         <legend>Add accessories</legend>
@@ -82,15 +82,17 @@
     </section>
 
     <!--
-      PLAIN ENGLISH: The spot where the 3 outfits will show up.
-      LOGIC: The HTML stays mostly empty. JavaScript will fill #outfit-list.
+      PLAIN ENGLISH: The spot where the 3 outfits show up.
+      LOGIC: The HTML stays mostly empty. shuffle.mjs fills #outfit-list with outfit cards.
+             aria-live="polite" tells screen readers to announce new outfits when they appear.
       WHY WE NEED IT: The wireframe shows 3 outfits, stacked on phone and side by side on desktop.
       LEARNING GAP: It's the same idea as #closet-bins on the closet page.
              The message below shows until the first shuffle replaces it.
+             Without aria-live, a screen reader user wouldn't know anything changed.
     -->
     <section id="outfits">
       <h2>Your Outfits</h2>
-      <div id="outfit-list">
+      <div id="outfit-list" aria-live="polite">
         <p class="empty">Click Shuffle to see 3 outfits.</p>
       </div>
     </section>
@@ -101,10 +103,13 @@
   </footer>
 
   <!--
-    PLAIN ENGLISH: The JavaScript line for this page gets added later.
-    LOGIC: It will point to its own starter file, so it doesn't mix with the closet page's main.js.
-    WHY WE NEED IT: Keeps the two pages separate, the way you asked.
-    LEARNING GAP: Linking a file that doesn't exist yet causes a console error, so we wait.
+    PLAIN ENGLISH: Start the Shuffle page's JavaScript.
+    LOGIC: type="module" lets shuffle-main.js import from shuffle.mjs, which imports from storage.mjs.
+    WHY WE NEED IT: This brings the SHUFFLE button to life. It's a separate starter from
+           the closet page's main.js, so the two pages don't mix.
+    LEARNING GAP: Modules only work through a server (Live Server or GitHub Pages), not by
+           double-clicking the file.
   -->
+  <script type="module" src="js/shuffle-main.js"></script>
 </body>
 </html>
