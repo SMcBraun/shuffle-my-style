@@ -1,6 +1,7 @@
 import { getCloset } from "./storage.mjs";
 import { drawOutfit } from "./outfit-drawing.mjs";
 import { getColorName, getColorMix } from "./color-api.mjs";
+import { makeSaveButton } from "./favorites.mjs";
 
 /*
   PLAIN ENGLISH: The three bins every outfit must have.
@@ -251,8 +252,8 @@ async function showColorMix(box, message, hex) {
   PLAIN ENGLISH: Show the outfits on the page as cards.
   LOGIC: Clear the area, then for each outfit make a card with a title ("Outfit 1"),
          the coloring-book drawing, a list of pieces (a color circle, the bin name, the
-         color's name, and the color code), and a "Colors that go with your top" section.
-         If there are fewer than 3 outfits, add a short note explaining why.
+         color's name, and the color code), a "Colors that go with your top" section,
+         and a Save button. If there are fewer than 3 outfits, add a short note explaining why.
   WHY WE NEED IT: The user SEES their outfits, first as a picture, then as exact colors.
   LEARNING GAP: We use textContent, not innerHTML, for text. It's safer, the same as renderCloset.
          The cards show up RIGHT AWAY. The color names and mix fill in a moment later, when
@@ -347,6 +348,16 @@ export function renderOutfits(container, outfits) {
         card.appendChild(mix);
 
         showColorMix(mix, mixMessage, top.color);
+
+        /*
+          PLAIN ENGLISH: Add the Save button at the bottom of each outfit card.
+          LOGIC: makeSaveButton (favorites.mjs) builds the button. "index" (0, 1, or 2) tells it
+                 which outfit it belongs to. It already shows "Saved" if this outfit was saved before.
+          WHY WE NEED IT: Card "Save favorites." The wireframe shows a Save button on every outfit.
+          LEARNING GAP: The click is handled in shuffle-main.js with ONE listener on the whole
+                 outfit area (event delegation), not one listener per button.
+        */
+        card.appendChild(makeSaveButton(outfit, index));
 
         container.appendChild(card);
     });

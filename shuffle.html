@@ -96,6 +96,26 @@
         <p class="empty">Click Shuffle to see 3 outfits.</p>
       </div>
     </section>
+
+    <!--
+      PLAIN ENGLISH: The Saved Outfits section, where favorite outfits and their wear counts show up.
+      LOGIC: The HTML stays mostly empty. favorites.mjs fills #favorite-list with saved outfit cards.
+             #favorites-status is a hidden message box with aria-live="polite". shuffle-main.js
+             puts short messages in it ("Outfit saved.") so screen readers announce them.
+      WHY WE NEED IT: Cards "Save favorites" and "Wear counter." The proposal promised users could
+             keep favorite outfits and track how often they wear them.
+      LEARNING GAP: aria-live is on the small status message, NOT on the whole list. If the whole
+             list were live, a screen reader would read every saved card out loud after each click.
+             The class "sr-only" hides the status from the eye but keeps it for screen readers.
+      WHERE THE DATA COMES FROM: The saved favorites in localStorage ("sms-favorites").
+    -->
+    <section id="favorites">
+      <h2>Saved Outfits</h2>
+      <p id="favorites-status" class="sr-only" aria-live="polite"></p>
+      <div id="favorite-list">
+        <p class="empty">No saved outfits yet. Shuffle, then tap ♡ Save outfit on a look you love.</p>
+      </div>
+    </section>
   </main>
 
   <footer>

@@ -922,3 +922,212 @@ footer {
     height: 1.25rem;
     border-width: 1.5px;
 }
+
+/* ==================== FAVORITES AND WEAR COUNTER ==================== */
+
+/*
+  PLAIN ENGLISH: Hide text from the eye but keep it for screen readers.
+  LOGIC: The element shrinks to 1px, gets clipped, and moves out of the way.
+         It's NOT display: none, because screen readers skip anything with display: none.
+  WHY WE NEED IT: The #favorites-status message ("Outfit saved.") is only for screen readers.
+         Sighted users already see the button change.
+  LEARNING GAP: This is a standard, widely used pattern. Many sites call it "sr-only" or
+         "visually-hidden." Every part of it matters, so copy it whole.
+*/
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/*
+  PLAIN ENGLISH: The Save button at the bottom of each outfit card.
+         It's a white pill with a charcoal outline and a small sunny "retro pop" shadow.
+         Once saved, it fills with sunny yellow.
+  LOGIC: width: 100% stretches it across the card, which is easy to tap on a phone.
+         [aria-pressed="true"] is the "saved" look. JavaScript sets aria-pressed (favorites.mjs).
+  WHY WE NEED IT: Card "Save favorites." It matches the Shuffle button's style but is smaller,
+         so Shuffle is still the star of the page.
+  LEARNING GAP: Styling by [aria-pressed="true"] means the look ALWAYS matches what screen readers
+         hear. If we used a separate "saved" class, the two could get out of step.
+*/
+.save-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    font: inherit;
+    font-family: var(--heading-font);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dark);
+    background-color: white;
+    border: 1.5px solid var(--dark);
+    border-radius: 999px;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--sunny);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+.save-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--sunny);
+}
+
+.save-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--sunny);
+}
+
+.save-btn[aria-pressed="true"] {
+    background-color: var(--sunny);
+    box-shadow: 3px 3px 0 var(--coral);
+}
+
+.save-btn:focus-visible,
+.wore-btn:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 4px;
+}
+
+/*
+  PLAIN ENGLISH: The Saved Outfits section: space above it, then cards in the same grid as the outfits.
+  LOGIC: 1 column on phones. The media query below makes 3 columns on desktop.
+  WHY WE NEED IT: Saved looks feel like part of the same page and match the outfit cards above.
+  LEARNING GAP: This copies the #outfit-list grid on purpose, so both areas line up the same way.
+*/
+#favorites {
+    margin-top: 3rem;
+}
+
+#favorites h2 {
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+#favorite-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/*
+  PLAIN ENGLISH: The "No saved outfits yet" message uses the same yellow "read me" box as the
+         other messages on this page.
+  LOGIC: The same pale sunny background, charcoal outline, and sunny shadow as #outfit-list .empty.
+  WHY WE NEED IT: The user already learned "yellow box = read me." Keeping the pattern avoids confusion.
+  LEARNING GAP: #favorite-list in front keeps this style from changing the closet page's
+         "No items yet." message, which also uses the .empty class.
+*/
+#favorite-list .empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--dark);
+    font-size: 1.05rem;
+    font-weight: 700;
+    background-color: #fff6d6;
+    border: 1.5px solid var(--dark);
+    border-radius: 1.25rem;
+    box-shadow: 4px 4px 0 var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: The wear count line, like "Worn 3 times · Last worn Oct 8, 2026."
+  LOGIC: The readable --muted gray and semi-bold weight, the same as the color codes.
+  WHY WE NEED IT: Card "Wear counter." The count is easy to find without shouting.
+  WHERE THE DATA COMES FROM: timesWorn and lastWorn in the saved favorite (localStorage).
+*/
+.worn-count {
+    margin: 1rem 0 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: The "Wore it today" and "Remove" buttons sit side by side at the bottom of a saved card.
+  LOGIC: Flexbox puts them in a row. The Remove button reuses .delete-btn, whose margin-left: auto
+         pushes it to the right side.
+  WHY WE NEED IT: The happy action (Wore it) is on the left where the eye starts. The quiet
+         "destructive" action (Remove) sits apart on the right, so it's harder to click by accident.
+  LEARNING GAP: flex-wrap lets the buttons drop to two lines on very small phones instead of squishing.
+*/
+.favorite-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/*
+  PLAIN ENGLISH: The "Wore it today" button: a pale turquoise pill with a turquoise retro shadow.
+  LOGIC: The same lift-on-hover and press-on-click as the other main buttons.
+  WHY WE NEED IT: Card "Wear counter." Turquoise sets it apart from the sunny Save button,
+         so the two jobs never look the same.
+  LEARNING GAP: Dark text on the pale turquoise background keeps strong contrast for easy reading.
+*/
+.wore-btn {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+    background-color: #e3f6f5;
+    border: 1.5px solid var(--dark);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--turquoise);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wore-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--turquoise);
+}
+
+.wore-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--turquoise);
+}
+
+/*
+  PLAIN ENGLISH: Desktop: 3 saved cards side by side, the same as the outfits.
+  LOGIC: Runs only on screens 700px wide or wider (mobile first).
+  WHY WE NEED IT: Matches the desktop layout of the outfit cards.
+*/
+@media (min-width: 700px) {
+    #favorite-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/*
+  PLAIN ENGLISH: If someone turned off animations, the new buttons stop moving too.
+  LOGIC: The same prefers-reduced-motion setting as the other buttons.
+  WHY WE NEED IT: Every new moving part must respect this setting, not just the old ones.
+  LEARNING GAP: The buttons still work and keep their colors and shadows. They just don't move.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    .save-btn,
+    .wore-btn {
+        transition: none;
+    }
+
+    .save-btn:hover,
+    .save-btn:active,
+    .wore-btn:hover,
+    .wore-btn:active {
+        transform: none;
+    }
+}
