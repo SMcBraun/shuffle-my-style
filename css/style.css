@@ -1178,14 +1178,24 @@ footer {
 }
 
 /*
-  PLAIN ENGLISH: Little sparkles (✦ ✧ ✦) twinkle next to each "OUTFIT 1" title, then settle in place.
+  PLAIN ENGLISH: Little sparkles (✦ ✧ ✦) pop in next to each "OUTFIT 1" title with a wiggle,
+         then keep twinkling gently the whole time the outfits are showing.
   LOGIC: ::after adds the sparkles after the title text, with no change to the HTML.
          position: absolute with right: 0 tucks them at the right end of the title line.
-         @keyframes sparkle-twinkle grows them from tiny to a little too big, then settles them
-         at normal size, with a small wiggle (rotate) for a magical feel.
+         The sparkles get TWO animations, separated by a comma:
+         1) sparkle-twinkle: the entrance. Grows from tiny to a little too big, then settles,
+            with a small wiggle (rotate). It plays once (1.2s, starting at 0.3s).
+         2) sparkle-glow: the forever twinkle. It waits 1.5s (until the entrance is done), then
+            softly dims and shrinks a little and brightens back, every 2.4s. "infinite" = repeat forever.
   WHY WE NEED IT: Card "Sparkle animation." The sparkles are the "magic wand" from the app's
-         icon idea, so the brand shows up right where the outfits appear.
-  LEARNING GAP: The h3 needs position: relative so the sparkles are placed inside the TITLE,
+         icon idea, so the brand shows up right where the outfits appear. Testing showed the first
+         version twinkled once and then froze, which was easy to miss. A gentle loop keeps the
+         "magic closet" feeling alive without being distracting.
+  LEARNING GAP: An element can run more than one animation. List them with commas, and each gets
+         its own timing. If two animations change the same property (like opacity), the one listed
+         LATER wins while it's running. That's why the glow waits until the entrance has finished.
+         By default an animation plays ONCE. "infinite" is what makes it repeat.
+         The h3 needs position: relative so the sparkles are placed inside the TITLE,
          not somewhere else on the page.
          The second content line, with / "", gives the sparkles empty "alt text," so screen readers
          skip them. They're decoration, and hearing "black four-pointed star" three times on every
@@ -1203,7 +1213,26 @@ footer {
     top: 0;
     color: var(--coral);
     letter-spacing: 0.2em;
-    animation: sparkle-twinkle 1.2s ease-in-out 0.3s both;
+    animation:
+        sparkle-twinkle 1.2s ease-in-out 0.3s both,
+        sparkle-glow 2.4s ease-in-out 1.5s infinite;
+}
+
+/*
+  PLAIN ENGLISH: Each card's sparkles start a little later than the card before it.
+  LOGIC: Two delays, one per animation, in the same order as above (entrance, then glow).
+         Card 2 waits a bit more than card 1, and card 3 waits a bit more than card 2.
+  WHY WE NEED IT: The entrance lines up with each card's pop-in, and the 3 cards twinkle at
+         slightly different moments, like real stars, instead of blinking in perfect sync.
+  LEARNING GAP: animation-delay can take a list too. The 1st delay goes with the 1st animation,
+         the 2nd with the 2nd.
+*/
+#outfit-list .outfit-card:nth-child(2) h3::after {
+    animation-delay: 0.42s, 1.9s;
+}
+
+#outfit-list .outfit-card:nth-child(3) h3::after {
+    animation-delay: 0.54s, 2.3s;
 }
 
 @keyframes sparkle-twinkle {
@@ -1228,10 +1257,33 @@ footer {
 }
 
 /*
+  PLAIN ENGLISH: The gentle, never-ending twinkle.
+  LOGIC: Starts and ends at full brightness and normal size (0% and 100% match, so each loop
+         flows smoothly into the next). Halfway through, the sparkles dim to 45% and shrink a little.
+  WHY WE NEED IT: Keeps the sparkles alive while the user looks at their outfits.
+  LEARNING GAP: When the first and last keyframes match, a looping animation has no "jump"
+         at the end of each round. The small changes (0.85 size, 0.45 opacity) keep it gentle.
+*/
+@keyframes sparkle-glow {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.85);
+    }
+}
+
+/*
   PLAIN ENGLISH: If someone turned off animations in their device settings, skip the pop and the twinkle.
-  LOGIC: animation: none turns them off. The cards and sparkles still show up, just instantly.
-  WHY WE NEED IT: Some people get dizzy from motion. Respecting this setting is professional,
-         accessible design, the same as the other buttons in this file.
+  LOGIC: animation: none turns them ALL off (the pop, the entrance, and the forever glow).
+         The cards and sparkles still show up, just instantly and still.
+  WHY WE NEED IT: Some people get dizzy from motion. A never-ending animation matters even more
+         here, so respecting this setting is professional, accessible design.
   LEARNING GAP: Every NEW animation needs this, not just the old ones. Forgetting it is a common
          accessibility mistake that ESLint and validators won't catch for you.
 */
@@ -1251,11 +1303,11 @@ footer {
          object-fit: cover fills that space without stretching the photo (it trims the edges instead).
          Rounded corners and a thin warm border match the chic card style.
          The cream background shows while the photo is still loading.
-  WHY WE NEED IT: Card "Connect Unsplash + photo credit." The photo shows real people wearing
-         colors like the user's top, the inspiration the proposal promised.
+  WHY WE NEED IT: Card "Connect Unsplash + photo credit." The photo shows a hand-picked, modest
+         everyday look in the same color family as the user's top, the inspiration the proposal promised.
   LEARNING GAP: Without object-fit: cover, a tall photo squeezed into this box would look squished.
          "cover" is like a picture frame that trims the edges instead of bending the picture.
-  WHERE THE DATA COMES FROM: The photo address Unsplash sends back (urls.small).
+  WHERE THE DATA COMES FROM: The photo address Unsplash sends back (urls.small), from my 6 collections.
 */
 .inspiration-photo {
     display: block;
@@ -1295,12 +1347,13 @@ footer {
 }
 
 /*
-  PLAIN ENGLISH: A tiny note saying which color word was searched, like "Searched for: red."
-  LOGIC: Even smaller gray text, under the credit.
-  WHY WE NEED IT: Unsplash only knows 11 color words, so a coral top searches "red." The note
-         explains why the photo's color is close but not exact, so it doesn't look like a mistake.
+  PLAIN ENGLISH: A tiny note under the credit, like "Hand-picked look for a blue top."
+  LOGIC: Even smaller, readable --muted gray text.
+  WHY WE NEED IT: Tells the user the photo was chosen for their top's color family, so a close
+         (but not exact) shade doesn't look like a mistake.
   LEARNING GAP: Telling users WHY something happens builds trust, the same idea as the
          "Only 1 different outfit is possible" note.
+  WHERE THE DATA COMES FROM: The folder label from unsplash-api.mjs (like "blue" or "neutral").
 */
 .photo-note {
     margin: 0.25rem 0 0;
