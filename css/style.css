@@ -1469,3 +1469,554 @@ body {
         display: none;
     }
 }
+/* ==================== PAGE BACKGROUND PATTERN (BOTH PAGES) ==================== */
+
+/*
+  PLAIN ENGLISH: A soft background pattern of tiny hangers, sparkles, and dots, so the page isn't bare.
+  LOGIC: background-image uses a small SVG drawing (a "data URL") as a tile. The browser repeats the
+         tile across the whole page, like wallpaper. The cream color (--light) still shows underneath.
+         The hangers are 14% visible (stroke-opacity 0.14), so text on top stays easy to read.
+  WHY WE NEED IT: Makes the app feel finished and on-brand (closet hangers + magic sparkles) without
+         loading any image files.
+  LEARNING GAP: Background patterns must stay faint. A busy background lowers text contrast, which
+         fails accessibility. The white cards sit on top, so the main reading areas stay clean.
+*/
+body {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%232b2b2b' stroke-opacity='0.14' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M40 38 a6 6 0 1 1 6 6 v5 l-22 14 h44 l-22 -14'/%3E%3Cpath d='M150 128 a6 6 0 1 1 6 6 v5 l-22 14 h44 l-22 -14'/%3E%3C/g%3E%3Cpath d='M150 30 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z' fill='%23ff6f61' fill-opacity='0.35'/%3E%3Cpath d='M48 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z' fill='%231fb5ad' fill-opacity='0.35'/%3E%3Ccircle cx='105' cy='85' r='3.5' fill='%23ffd23f' fill-opacity='0.5'/%3E%3Ccircle cx='185' cy='75' r='3' fill='%231fb5ad' fill-opacity='0.4'/%3E%3Ccircle cx='95' cy='185' r='3' fill='%23ff6f61' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+/* ==================== WELCOME CARD (CLOSET PAGE) ==================== */
+
+/*
+  PLAIN ENGLISH: The welcome card at the top of the closet page, styled like the Shuffle card.
+  LOGIC: White background, soft border, rounded corners, and a gentle shadow, the same recipe
+         as #shuffle-controls, so both pages feel like one app.
+  WHY WE NEED IT: Explains the app's purpose and the 3 steps before the user starts.
+  LEARNING GAP: Reusing the same card recipe keeps the design consistent. Consistency makes
+         an app feel professional and easier to learn.
+  WHERE THE DATA COMES FROM: The words are written right in index.html. Nothing is loaded.
+*/
+#welcome {
+    background-color: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 12px 32px rgba(43, 43, 43, 0.05);
+    margin: 1rem 0 2.5rem;
+}
+
+#welcome h2 {
+    margin-top: 0;
+    font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+}
+
+.welcome-lead {
+    max-width: 34rem;
+    margin: 0 auto 1.75rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+/*
+  PLAIN ENGLISH: The 3 steps, each with a big round number in one of the app's 3 colors.
+  LOGIC: list-style: none hides the browser's plain "1. 2. 3." numbers. A CSS counter makes
+         our own numbers, and ::before draws each one inside a colored circle.
+         On phones the steps stack. On wider screens (700px and up), grid puts them side by side.
+  WHY WE NEED IT: Big, colorful step numbers are easy to scan, and they match the 3 logo dots.
+  LEARNING GAP: counter-reset starts the count at 0. counter-increment adds 1 for each <li>.
+         counter(step) prints the current number. The <ol> still tells screen readers "3 items."
+*/
+.welcome-steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 0 auto 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+    max-width: 52rem;
+    text-align: left;
+}
+
+.welcome-steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 1rem 1rem 1rem 3.75rem;
+    background-color: var(--light);
+    border-radius: 1rem;
+    line-height: 1.5;
+    color: var(--dark);
+}
+
+.welcome-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--heading-font);
+    font-weight: 700;
+    color: var(--dark);
+    background-color: var(--coral);
+}
+
+.welcome-steps li:nth-child(2)::before {
+    background-color: var(--turquoise);
+}
+
+.welcome-steps li:nth-child(3)::before {
+    background-color: var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: The bold mini-title at the start of each step, on its own line.
+  LOGIC: display: block puts the title above the description.
+  WHY WE NEED IT: Users can scan the 3 titles and get the idea in 3 seconds.
+  LEARNING GAP: A <span> is normally inline (stays on the same line). display: block changes that.
+*/
+.step-title {
+    display: block;
+    font-family: var(--heading-font);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+/*
+  PLAIN ENGLISH: The small note about where the closet is saved.
+  LOGIC: Smaller, readable --muted gray text, the same color tested for contrast in Week 6.
+  WHY WE NEED IT: Explains localStorage in everyday words, so users aren't surprised when
+         another phone or computer shows an empty closet.
+  LEARNING GAP: Telling users how their data is stored builds trust.
+*/
+.welcome-note {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+@media (min-width: 700px) {
+    .welcome-steps {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/*
+  PLAIN ENGLISH: The clothing-rack drawing at the top of the welcome card.
+  LOGIC: The SVG is written right in index.html. max-width lets it grow up to 560px wide on big screens,
+         width: 100% shrinks it to fit phones, and margin auto centers it.
+  WHY WE NEED IT: A picture tells users "this is about your closet" before they read a word.
+  LEARNING GAP: aria-hidden="true" on the SVG tells screen readers to skip it, because it's
+         decoration. The words in the card already explain everything.
+*/
+.welcome-art {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 0 auto 1rem;
+}
+
+/*
+  PLAIN ENGLISH: The "why it matters" row: 3 short value points with colored dots.
+  LOGIC: A list (<ul>) with no bullets. flex-wrap lets the 3 points sit in a row on wide screens
+         and wrap onto new lines on phones.
+  WHY WE NEED IT: Tells users the VALUE of the app (wear what you own, save money, dress faster),
+         not just what the buttons do.
+  LEARNING GAP: <ul> (unordered list) is used here because these points have no order, unlike the steps.
+*/
+.welcome-values {
+    list-style: none;
+    margin: 0 auto 2rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.welcome-values li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    background-color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.welcome-values li::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--coral);
+    flex-shrink: 0;
+}
+
+.welcome-values li:nth-child(2)::before {
+    background-color: var(--turquoise);
+}
+
+.welcome-values li:nth-child(3)::before {
+    background-color: var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: The small "How it works" heading above the 3 steps.
+  LOGIC: Same small, spaced-out capital letters as "ADD ACCESSORIES" on the Shuffle page.
+  WHY WE NEED IT: Separates the "why" (values) from the "how" (steps).
+  LEARNING GAP: It's an <h3> because it sits inside the welcome section's <h2>. Headings go in order.
+*/
+.welcome-howto {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: A short helper sentence under "Add to My Closet" and "My Closet."
+  LOGIC: --muted gray text with a little space below, so it reads as a hint, not a heading.
+  WHY WE NEED IT: Tells users what they're looking at in each section.
+  LEARNING GAP: Short hints right where people need them work better than long instructions at the top.
+*/
+.section-hint {
+    margin: -0.5rem 0 1.25rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* ==================== HEADER TAGLINE + MENU HINTS (BOTH PAGES) ==================== */
+
+/*
+  PLAIN ENGLISH: Groups the app name and the 2-sentence tagline together on the left of the header.
+  LOGIC: The .brand box holds the <h1> and the tagline <p>. On phones everything is centered.
+         On wider screens (700px and up) the brand sits on the left and the menu on the right.
+  WHY WE NEED IT: The very first thing users read now tells them what the app does.
+  LEARNING GAP: The tagline is a <p>, not a heading. Only the app name is the page's main heading (<h1>).
+*/
+.brand {
+    text-align: center;
+}
+
+.tagline {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+/*
+  PLAIN ENGLISH: Each menu link now has 2 lines: the page name, and a tiny hint about what you do there.
+  LOGIC: The link becomes a small column (flex-direction: column). The hint is smaller, gray,
+         and not bold, so the page name still stands out.
+  WHY WE NEED IT: Users know what each page is for before they click.
+  LEARNING GAP: The hint is INSIDE the link, so screen readers read it as part of the link's name,
+         like "My Closet, Add your clothes." That's helpful, not repetitive.
+*/
+nav a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-hint {
+    font-family: var(--body-font);
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+@media (min-width: 700px) {
+    .brand {
+        text-align: left;
+    }
+
+    .brand h1 {
+        justify-content: flex-start;
+    }
+
+    /*
+      LOGIC: 54px = the dots (10px) + their space (44px), so the tagline lines up under
+             the words "Shuffle My Style," not under the dots.
+    */
+    .tagline {
+        margin: 0.15rem 0 0 54px;
+    }
+}
+
+/* ==================== CREAM CARDS FOR THE FORM AND CLOSET (CLOSET PAGE) ==================== */
+
+/*
+  PLAIN ENGLISH: Put "Add to My Closet" and "My Closet" on soft cream cards, so the background
+         pattern shows around the edges but never behind the words.
+  LOGIC: Each section gets a solid cream background (--light), a soft border, rounded corners,
+         and padding, the same card recipe as the welcome card. The 6 white bins still stand out
+         on the cream.
+  WHY WE NEED IT: The stronger pattern looks great, but text sitting on top of hangers and sparkles
+         is hard to read. A solid card behind the text keeps it clear.
+  LEARNING GAP: This is the "readable text" rule from Week 6. Decoration goes AROUND content,
+         never behind it.
+*/
+#add-item,
+#closet {
+    background-color: var(--light);
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 12px 32px rgba(43, 43, 43, 0.05);
+}
+
+#add-item h2,
+#closet h2 {
+    margin-top: 0;
+}
+
+/* ==================== CREAM CARDS FOR OUTFITS AND SAVED OUTFITS (SHUFFLE PAGE) ==================== */
+
+/*
+  PLAIN ENGLISH: Put "Your Outfits" and "Saved Outfits" on the same soft cream cards as the closet page.
+  LOGIC: The same card recipe as #add-item and #closet: cream background, soft border, rounded
+         corners, padding, and a gentle shadow. The white outfit cards still stand out on the cream.
+  WHY WE NEED IT: Keeps the background pattern from showing behind the section headings, so they
+         stay easy to read. Both pages now match.
+  LEARNING GAP: Decoration goes AROUND content, never behind it. Matching cards on both pages
+         make the app feel like one finished product.
+*/
+#outfits,
+#favorites {
+    background-color: var(--light);
+    border: 1px solid var(--border-soft);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 1px 2px rgba(43, 43, 43, 0.04), 0 12px 32px rgba(43, 43, 43, 0.05);
+}
+
+#outfits h2,
+#favorites h2 {
+    margin-top: 0;
+}
+
+/* ==================== ONE-STOP START ROW (CLOSET PAGE) ==================== */
+
+/*
+  PLAIN ENGLISH: Make the welcome card compact and put it side by side with the add-item form,
+         so users see what to do AND where to do it, without scrolling.
+  LOGIC: .start-row is a CSS grid. On phones it's 1 column (stacked). From 900px wide and up,
+         it becomes 2 columns: the welcome card (a bit wider) on the left, the form on the right.
+         align-items: start keeps each card only as tall as it needs.
+         The rules below also shrink the welcome card's spacing, rack, and steps.
+  WHY WE NEED IT: A "one-stop shop" feel. The Add Item button is visible as soon as the page
+         opens, so users can start right away. Less scrolling keeps people engaged.
+  LEARNING GAP: These rules come LAST in the file on purpose. When two rules are equally strong,
+         the later one wins, so these compact sizes replace the bigger ones from earlier.
+         "Above the fold" means what users see before scrolling. The main action belongs there.
+*/
+.start-row {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+    margin: 1rem 0 2.5rem;
+}
+
+.start-row #welcome,
+.start-row #add-item {
+    margin: 0;
+}
+
+#welcome {
+    padding: 1.25rem 1.25rem 1rem;
+}
+
+.welcome-art {
+    max-width: 380px;
+    margin-bottom: 0.5rem;
+}
+
+#welcome h2 {
+    margin-bottom: 0.4rem;
+    font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+}
+
+.welcome-lead {
+    margin-bottom: 0.9rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+}
+
+.welcome-values {
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.welcome-values li {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.welcome-howto {
+    margin-bottom: 0.6rem;
+    font-size: 0.75rem;
+}
+
+/*
+  PLAIN ENGLISH: The 3 steps become a short, tidy list: one line each, stacked.
+  LOGIC: grid-template-columns: 1fr keeps them in 1 column (this replaces the 3-column rule
+         from earlier). Smaller padding and number circles make each step one compact row.
+  WHY WE NEED IT: The steps take up much less height, so the whole card fits on screen.
+  LEARNING GAP: display: inline (instead of block) puts the bold step title on the SAME line
+         as its description, which saves a whole line per step.
+*/
+.welcome-steps {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.welcome-steps li {
+    padding: 0.55rem 0.75rem 0.55rem 3rem;
+    font-size: 0.92rem;
+}
+
+.welcome-steps li::before {
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.85rem;
+}
+
+.step-title {
+    display: inline;
+    margin: 0 0.25rem 0 0;
+}
+
+.welcome-note {
+    font-size: 0.82rem;
+}
+
+@media (min-width: 700px) {
+    .welcome-steps {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 900px) {
+    .start-row {
+        grid-template-columns: 1.35fr 1fr;
+    }
+
+    /*
+      LOGIC: position: sticky keeps the form in view while the welcome card scrolls, on tall pages.
+             top: 1rem is how far from the top of the window it stops.
+    */
+    .start-row #add-item {
+        position: sticky;
+        top: 1rem;
+    }
+
+    .start-row #item-form {
+        max-width: none;
+    }
+}
+
+/*
+  PLAIN ENGLISH: The phone-only "Start adding clothes" button, styled like the Add Item button.
+  LOGIC: Charcoal pill with the sunny offset shadow from the app's button style. From 900px up,
+         display: none hides it, because the form is already beside the welcome card.
+         scroll-behavior: smooth makes the jump glide instead of snapping.
+  WHY WE NEED IT: A clear, tappable next step on phones, so users don't have to hunt for the form.
+  LEARNING GAP: scroll-margin-top leaves a little space above the form after the jump, so its
+         heading isn't stuck against the top edge of the screen.
+*/
+html {
+    scroll-behavior: smooth;
+}
+
+#add-item {
+    scroll-margin-top: 1rem;
+}
+
+.jump-btn {
+    display: inline-block;
+    margin-top: 0.9rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 999px;
+    background-color: var(--dark);
+    color: white;
+    font-family: var(--heading-font);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 var(--sunny);
+}
+
+.jump-btn:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 3px;
+}
+
+@media (min-width: 900px) {
+    .jump-btn {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ==================== WIDER LAYOUT + DEPTH (BOTH PAGES) ==================== */
+
+/*
+  PLAIN ENGLISH: On big screens, let the page grow wider (up to 1200px) and make the rack fill
+         the welcome card, so there's less empty space on the sides.
+  LOGIC: main's max-width goes from 960px to 1200px. On screens 900px and wider, the rack drawing
+         can stretch to the full width of its card (max-width: 100%).
+  WHY WE NEED IT: Uses the open space on large monitors, so the app feels full and confident.
+  LEARNING GAP: max-width is a LIMIT, not a set size. On a small laptop the page is still only as
+         wide as the window, so nothing breaks. It only grows when there's room.
+*/
+main {
+    max-width: 1200px;
+}
+
+@media (min-width: 900px) {
+    .start-row .welcome-art {
+        max-width: 100%;
+    }
+}
+
+/*
+  PLAIN ENGLISH: Give every card a deeper, softer shadow, so the cards seem to float above the page.
+  LOGIC: Two shadows stacked together: a small, close one (a crisp edge) and a big, blurry one
+         further down (a soft glow). Using 2 layers looks more natural than 1 dark shadow.
+  WHY WE NEED IT: Adds depth, so the eye goes straight to the cards and their buttons, not
+         the background.
+  LEARNING GAP: box-shadow values are: sideways, down, blur, color. rgba(43, 43, 43, 0.12) is the
+         charcoal color at 12% strength. Real shadows are soft and see-through, never solid black.
+*/
+#welcome,
+#add-item,
+#closet,
+#shuffle-controls,
+#outfits,
+#favorites {
+    box-shadow:
+        0 2px 4px rgba(43, 43, 43, 0.06),
+        0 18px 40px rgba(43, 43, 43, 0.12);
+}

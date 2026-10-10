@@ -46,22 +46,133 @@
     LEARNING GAP: shuffle.html gets built in Week 6. The link is ready ahead of time.
   -->
   <header>
-    <h1>Shuffle My Style</h1>
+    <!--
+      PLAIN ENGLISH: The app name plus a quick 2-sentence tagline that says what the app does.
+      LOGIC: The .brand box keeps the name and tagline together on the left (desktop) or centered (phone).
+      WHY WE NEED IT: The first words users see explain the app's purpose.
+      LEARNING GAP: Only the app name is the <h1>. The tagline is a regular paragraph.
+    -->
+    <div class="brand">
+      <h1>Shuffle My Style</h1>
+      <p class="tagline">Mix and match the clothes you already own. Fresh outfits, no shopping.</p>
+    </div>
+    <!--
+      PLAIN ENGLISH: The menu. Each link shows the page name and a tiny hint about what you do there.
+      LOGIC: Two <span>s inside each link: .nav-label (the name) and .nav-hint (the hint).
+      WHY WE NEED IT: Users know what each page is for before they click.
+      LEARNING GAP: aria-current="page" marks the page you're on, so it gets the coral underline.
+    -->
     <nav>
-      <a href="index.html" aria-current="page">My Closet</a>
-      <a href="shuffle.html">Shuffle</a>
+      <a href="index.html" aria-current="page"><span class="nav-label">My Closet</span><span class="nav-hint">Add your clothes</span></a>
+      <a href="shuffle.html"><span class="nav-label">Shuffle</span><span class="nav-hint">Mix new outfits</span></a>
     </nav>
   </header>
 
   <main>
     <!--
-      PLAIN ENGLISH: Where the add-item form goes (bin + color).
-      LOGIC: Empty for now. Filled in by the "Build item-card form" card.
-      WHY WE NEED IT: Sets up the page layout from the wireframe.
-      LEARNING GAP: id="add-item" gives JavaScript a name to find this spot.
+      PLAIN ENGLISH: The "start row": the welcome card and the add-item form side by side.
+      LOGIC: A <div class="start-row"> holds both sections. On wide screens, CSS grid puts them
+             in 2 columns. On phones, they stack (welcome on top, form right under it).
+      WHY WE NEED IT: A "one-stop shop" feel. Users read what to do AND see where to do it,
+             without scrolling up and down.
+      LEARNING GAP: The <div> is only for layout. It has no meaning of its own, so screen readers
+             still go straight to the 2 sections inside it.
     -->
-        <section id="add-item">
+    <div class="start-row">
+    <!--
+      PLAIN ENGLISH: A welcome card that tells new users what this app is, why it's worth using,
+             and how to use it in 3 steps.
+      LOGIC: A <section> with a clothing-rack drawing, a heading, one sentence about the app's purpose,
+             a "why it matters" list (<ul>), a "How it works" list of 3 steps (<ol>), and a note
+             about where the closet is saved.
+      WHY WE NEED IT: A brand-new user (or grader) lands here first. Without it, they wouldn't know
+             the app's purpose, or that they need to fill the closet before shuffling.
+      LEARNING GAP: <ol> (ordered list) is for steps that happen in order. <ul> is for points with
+             no order. Screen readers announce "list, 3 items," so everyone knows how many there are.
+             The note about "this browser" explains the localStorage cubby in everyday words.
+    -->
+    <section id="welcome" aria-labelledby="welcome-title">
+      <svg class="welcome-art" viewBox="0 0 570 150" aria-hidden="true" focusable="false">
+        <!-- the rack: a long bar with two stands and little feet -->
+        <line x1="18" y1="22" x2="552" y2="22" stroke="#2b2b2b" stroke-width="5" stroke-linecap="round"/>
+        <line x1="32" y1="22" x2="32" y2="142" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round"/>
+        <line x1="538" y1="22" x2="538" y2="142" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round"/>
+        <line x1="18" y1="142" x2="46" y2="142" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round"/>
+        <line x1="524" y1="142" x2="552" y2="142" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round"/>
+        <!-- 8 hangers with clothes in the app colors: tee, dress, pants, tee, skirt, jacket, dress, pants -->
+        <g stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round">
+          <path d="M75 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M61 37 h28 l7 12 -8 4 v38 h-26 v-38 l-8 -4z" fill="#ff6f61"/>
+          <path d="M135 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M124 37 h22 l14 66 h-50z" fill="#1fb5ad"/>
+          <path d="M195 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M182 37 h26 v70 h-11 l-2 -46 -2 46 h-11z" fill="#fffaf3"/>
+          <path d="M255 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M241 37 h28 l7 12 -8 4 v38 h-26 v-38 l-8 -4z" fill="#ffd23f"/>
+          <path d="M315 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M303 37 h24 l11 42 h-46z" fill="#ff6f61"/>
+          <path d="M375 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M361 37 h28 l7 12 -7 3 v52 h-28 v-52 l-7 -3z" fill="#1fb5ad"/><line x1="375" y1="40" x2="375" y2="104"/>
+          <path d="M435 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M424 37 h22 l14 66 h-50z" fill="#ffd23f"/>
+          <path d="M495 22 v6 l-16 9 h32 l-16 -9" fill="none"/>
+          <path d="M482 37 h26 v70 h-11 l-2 -46 -2 46 h-11z" fill="#2b2b2b"/>
+          <!-- 3 pairs of shoes under the rack -->
+          <path d="M150 140 h14 l6 -6 h-12z M168 140 h14 l6 -6 h-12z" fill="#ff6f61"/>
+          <path d="M270 140 h14 l6 -6 h-12z M288 140 h14 l6 -6 h-12z" fill="#1fb5ad"/>
+          <path d="M390 140 h14 l6 -6 h-12z M408 140 h14 l6 -6 h-12z" fill="#ffd23f"/>
+        </g>
+        <!-- magic sparkles -->
+        <path d="M556 50 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffd23f" stroke="#2b2b2b" stroke-width="1"/>
+        <path d="M12 66 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ff6f61"/>
+        <path d="M520 112 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z" fill="#1fb5ad"/>
+        <path d="M285 4 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z" fill="#ff6f61"/>
+        <path d="M52 112 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z" fill="#ffd23f" stroke="#2b2b2b" stroke-width="0.8"/>
+      </svg>
+      <h2 id="welcome-title">Welcome to Shuffle My Style</h2>
+      <p class="welcome-lead">
+        Lots of clothes, but wearing the same few outfits? Mix what you already own into
+        fresh new looks. No shopping needed.
+      </p>
+      <ul class="welcome-values">
+        <li>Wear what you already own</li>
+        <li>Save money</li>
+        <li>Get dressed faster</li>
+      </ul>
+      <h3 class="welcome-howto">How it works</h3>
+      <ol class="welcome-steps">
+        <li><span class="step-title">Fill your closet</span> Add each piece: pick its bin and color.</li>
+        <li><span class="step-title">Shuffle</span> Get 3 outfits made from your own clothes.</li>
+        <li><span class="step-title">Save and wear</span> Keep your favorites and track what you wear.</li>
+      </ol>
+      <p class="welcome-note">Your closet saves in this browser, so it's ready when you come back.</p>
+      <!--
+        PLAIN ENGLISH: A "jump" button that scrolls straight down to the add-item form (phones only).
+        LOGIC: href="#add-item" links to the section with id="add-item" on this same page.
+               CSS hides it on wide screens, where the form is already right next to the card.
+        WHY WE NEED IT: On phones the form sits below the welcome card. One tap gets users there.
+        LEARNING GAP: A link that starts with # goes to a spot on the SAME page, not a new page.
+               No JavaScript needed.
+      -->
+      <a class="jump-btn" href="#add-item">Start adding clothes &darr;</a>
+    </section>
+
+    <!--
+      PLAIN ENGLISH: The add-item form card (bin + color), right next to the welcome card.
+      LOGIC: On wide screens it's the right column of the start row. On phones it sits under the
+             welcome card, and the "Start adding clothes" button jumps here.
+      WHY WE NEED IT: Card "Build item-card form." It's the first thing users DO in the app.
+      LEARNING GAP: id="add-item" has 2 jobs: CSS styles it, and the jump link (#add-item) finds it.
+    -->
+    <section id="add-item">
       <h2>Add to My Closet</h2>
+      <!--
+        PLAIN ENGLISH: A one-line hint that tells users what this form is for.
+        LOGIC: A <p> with the class "section-hint" (styled in style.css).
+        WHY WE NEED IT: Users know exactly what to do here without guessing.
+        LEARNING GAP: Hints go right under the heading they explain, where the eye lands next.
+      -->
+      <p class="section-hint">Start here! Choose a bin, pick the closest color, and click Add Item.</p>
       <!--
         PLAIN ENGLISH: The quick form: pick a bin, pick a color, click Add.
         LOGIC: The dropdown options are filled in by JavaScript (fillBinOptions).
@@ -81,8 +192,8 @@
         <button type="submit">Add Item</button>
       </form>
     </section>
+    </div>
 
-    
     <!--
       PLAIN ENGLISH: Where the clothes show up, grouped into 6 bins.
       LOGIC: JavaScript will fill this area from saved data.
@@ -91,6 +202,7 @@
     -->
     <section id="closet">
       <h2>My Closet</h2>
+      <p class="section-hint">Everything you've added, sorted into 6 bins. Delete anything you donate or no longer wear.</p>
       <div id="closet-bins"></div>
     </section>
   </main>

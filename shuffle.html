@@ -46,10 +46,25 @@
     LEARNING GAP: aria-current moves to whichever page you're on. It's not always on the first link.
   -->
   <header>
-    <h1>Shuffle My Style</h1>
+    <!--
+      PLAIN ENGLISH: The app name plus a quick 2-sentence tagline that says what the app does.
+      LOGIC: The .brand box keeps the name and tagline together on the left (desktop) or centered (phone).
+      WHY WE NEED IT: The first words users see explain the app's purpose.
+      LEARNING GAP: Only the app name is the <h1>. The tagline is a regular paragraph.
+    -->
+    <div class="brand">
+      <h1>Shuffle My Style</h1>
+      <p class="tagline">Mix and match the clothes you already own. Fresh outfits, no shopping.</p>
+    </div>
+    <!--
+      PLAIN ENGLISH: The menu. Each link shows the page name and a tiny hint about what you do there.
+      LOGIC: Two <span>s inside each link: .nav-label (the name) and .nav-hint (the hint).
+      WHY WE NEED IT: Users know what each page is for before they click.
+      LEARNING GAP: aria-current="page" marks the page you're on, so it gets the coral underline.
+    -->
     <nav>
-      <a href="index.html">My Closet</a>
-      <a href="shuffle.html" aria-current="page">Shuffle</a>
+      <a href="index.html"><span class="nav-label">My Closet</span><span class="nav-hint">Add your clothes</span></a>
+      <a href="shuffle.html" aria-current="page"><span class="nav-label">Shuffle</span><span class="nav-hint">Mix new outfits</span></a>
     </nav>
   </header>
 
