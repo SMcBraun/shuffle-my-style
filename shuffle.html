@@ -29,6 +29,13 @@
     LEARNING GAP: We are NOT making a second CSS file. Sharing one keeps the pages consistent.
   -->
   <link rel="stylesheet" href="css/style.css">
+  <!--
+    PLAIN ENGLISH: The tiny icon on the browser tab: the app's 3 color dots (coral, turquoise, sunny).
+    LOGIC: The picture is a small SVG written right in the link (a "data URL"), so there's no image file to load.
+    WHY WE NEED IT: Without it, the browser asks for favicon.ico, gets a 404, and shows a red Console error.
+    LEARNING GAP: Inside a data URL, # must be written as %23, so #ff6f61 becomes %23ff6f61.
+  -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 48 48%27%3E%3Ccircle cx=%278%27 cy=%2724%27 r=%277%27 fill=%27%23ff6f61%27/%3E%3Ccircle cx=%2724%27 cy=%2724%27 r=%277%27 fill=%27%231fb5ad%27/%3E%3Ccircle cx=%2740%27 cy=%2724%27 r=%277%27 fill=%27%23ffd23f%27/%3E%3C/svg%3E">
 </head>
 <body>
 
