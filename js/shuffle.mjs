@@ -2,6 +2,7 @@ import { getCloset } from "./storage.mjs";
 import { drawOutfit } from "./outfit-drawing.mjs";
 import { getColorName, getColorMix } from "./color-api.mjs";
 import { makeSaveButton } from "./favorites.mjs";
+import { getOutfitPhoto, UNSPLASH_HOME } from "./unsplash-api.mjs";
 
 /*
   PLAIN ENGLISH: The three bins every outfit must have.
@@ -40,8 +41,8 @@ const MAX_TRIES = 100;
   WHERE THE DATA COMES FROM: The checkboxes in shuffle.html (name="accessory").
 */
 export function getCheckedAccessories(fieldset) {
-    const checked = fieldset.querySelectorAll('input[name="accessory"]:checked');
-    return Array.from(checked).map((box) => box.value);
+       const checked = fieldset.querySelectorAll('input[name="accessory"]:checked');
+       return Array.from(checked).map((box) => box.value);
 }
 
 /*
@@ -53,8 +54,8 @@ export function getCheckedAccessories(fieldset) {
          which is why we round DOWN, never up.
 */
 function pickRandom(list) {
-    const index = Math.floor(Math.random() * list.length);
-    return list[index];
+       const index = Math.floor(Math.random() * list.length);
+       return list[index];
 }
 
 /*
@@ -64,7 +65,7 @@ function pickRandom(list) {
   LEARNING GAP: It's the same filter() idea as renderCloset in closet.mjs.
 */
 function itemsInBin(items, bin) {
-    return items.filter((item) => item.bin === bin);
+       return items.filter((item) => item.bin === bin);
 }
 
 /*
@@ -75,8 +76,8 @@ function itemsInBin(items, bin) {
   WHERE THE DATA COMES FROM: The saved closet in localStorage (getCloset).
 */
 export function findMissingBins() {
-    const items = getCloset();
-    return REQUIRED_BINS.filter((bin) => itemsInBin(items, bin).length === 0);
+       const items = getCloset();
+       return REQUIRED_BINS.filter((bin) => itemsInBin(items, bin).length === 0);
 }
 
 /*
@@ -89,10 +90,10 @@ export function findMissingBins() {
          It starts at 1, not 0, because anything multiplied by 0 is 0.
 */
 function countPossibleOutfits(items, bins) {
-    return bins.reduce((total, bin) => {
-        const count = itemsInBin(items, bin).length;
-        return count > 0 ? total * count : total;
-    }, 1);
+       return bins.reduce((total, bin) => {
+              const count = itemsInBin(items, bin).length;
+              return count > 0 ? total * count : total;
+       }, 1);
 }
 
 /*
@@ -104,7 +105,7 @@ function countPossibleOutfits(items, bins) {
          same color. The IDs come from Date.now() in addItem (closet.mjs), so each is unique.
 */
 function outfitKey(outfit) {
-    return outfit.map((item) => item.id).join("-");
+       return outfit.map((item) => item.id).join("-");
 }
 
 /*
@@ -123,22 +124,22 @@ function outfitKey(outfit) {
   WHERE THE DATA COMES FROM: The saved closet items, plus usedTopColors from buildOutfits.
 */
 function buildOneOutfit(items, bins, usedTopColors) {
-    const outfit = [];
-    bins.forEach((bin) => {
-        let choices = itemsInBin(items, bin);
+       const outfit = [];
+       bins.forEach((bin) => {
+              let choices = itemsInBin(items, bin);
 
-        if (bin === "Tops") {
-            const freshTops = choices.filter((item) => !usedTopColors.has(item.color));
-            if (freshTops.length > 0) {
-                choices = freshTops;
-            }
-        }
+              if (bin === "Tops") {
+                     const freshTops = choices.filter((item) => !usedTopColors.has(item.color));
+                     if (freshTops.length > 0) {
+                            choices = freshTops;
+                     }
+              }
 
-        if (choices.length > 0) {
-            outfit.push(pickRandom(choices));
-        }
-    });
-    return outfit;
+              if (choices.length > 0) {
+                     outfit.push(pickRandom(choices));
+              }
+       });
+       return outfit;
 }
 
 /*
@@ -155,29 +156,29 @@ function buildOneOutfit(items, bins, usedTopColors) {
   WHERE THE DATA COMES FROM: The saved closet (getCloset) and the checked pills.
 */
 export function buildOutfits(accessoryBins) {
-    const items = getCloset();
-    const bins = [...REQUIRED_BINS, ...accessoryBins];
-    const target = Math.min(OUTFIT_COUNT, countPossibleOutfits(items, bins));
+       const items = getCloset();
+       const bins = [...REQUIRED_BINS, ...accessoryBins];
+       const target = Math.min(OUTFIT_COUNT, countPossibleOutfits(items, bins));
 
-    const outfits = [];
-    const seen = new Set();
-    const usedTopColors = new Set();
-    let tries = 0;
+       const outfits = [];
+       const seen = new Set();
+       const usedTopColors = new Set();
+       let tries = 0;
 
-    while (outfits.length < target && tries < MAX_TRIES) {
-        const outfit = buildOneOutfit(items, bins, usedTopColors);
-        const key = outfitKey(outfit);
+       while (outfits.length < target && tries < MAX_TRIES) {
+              const outfit = buildOneOutfit(items, bins, usedTopColors);
+              const key = outfitKey(outfit);
 
-        if (!seen.has(key)) {
-            seen.add(key);
-            outfits.push(outfit);
-            usedTopColors.add(outfit.find((item) => item.bin === "Tops").color);
-        }
+              if (!seen.has(key)) {
+                     seen.add(key);
+                     outfits.push(outfit);
+                     usedTopColors.add(outfit.find((item) => item.bin === "Tops").color);
+              }
 
-        tries++;
-    }
+              tries++;
+       }
 
-    return outfits;
+       return outfits;
 }
 
 /*
@@ -192,12 +193,12 @@ export function buildOutfits(accessoryBins) {
   WHERE THE DATA COMES FROM: getColorName in color-api.mjs (The Color API /id answer).
 */
 async function showColorName(target, hex) {
-    try {
-        target.textContent = await getColorName(hex);
-    } catch (error) {
-        target.textContent = "";
-        console.error(error);
-    }
+       try {
+              target.textContent = await getColorName(hex);
+       } catch (error) {
+              target.textContent = "";
+              console.error(error);
+       }
 }
 
 /*
@@ -215,37 +216,108 @@ async function showColorName(target, hex) {
   WHERE THE DATA COMES FROM: getColorMix in color-api.mjs (The Color API /scheme answer).
 */
 async function showColorMix(box, message, hex) {
-    try {
-        const colors = await getColorMix(hex);
+       try {
+              const colors = await getColorMix(hex);
 
-        if (colors.length === 0) {
-            message.textContent = "No new color ideas for this top yet. Shuffle again for more.";
-            return;
-        }
+              if (colors.length === 0) {
+                     message.textContent = "No new color ideas for this top yet. Shuffle again for more.";
+                     return;
+              }
 
-        const list = document.createElement("ul");
-        list.className = "color-mix-list";
+              const list = document.createElement("ul");
+              list.className = "color-mix-list";
 
-        colors.forEach((color) => {
-            const li = document.createElement("li");
+              colors.forEach((color) => {
+                     const li = document.createElement("li");
 
-            const swatch = document.createElement("span");
-            swatch.className = "swatch swatch-small";
-            swatch.style.backgroundColor = color.hex;
+                     const swatch = document.createElement("span");
+                     swatch.className = "swatch swatch-small";
+                     swatch.style.backgroundColor = color.hex;
 
-            const name = document.createElement("span");
-            name.textContent = color.name;
+                     const name = document.createElement("span");
+                     name.textContent = color.name;
 
-            li.append(swatch, name);
-            list.appendChild(li);
-        });
+                     li.append(swatch, name);
+                     list.appendChild(li);
+              });
 
-        message.remove();
-        box.appendChild(list);
-    } catch (error) {
-        message.textContent = "Color ideas are taking a break. Try Shuffle again soon.";
-        console.error(error);
-    }
+              message.remove();
+              box.appendChild(list);
+       } catch (error) {
+              message.textContent = "Color ideas are taking a break. Try Shuffle again soon.";
+              console.error(error);
+       }
+}
+
+/*
+  PLAIN ENGLISH: Make a link that opens in a new tab, for the photo credit.
+  LOGIC: target="_blank" opens a new tab. rel="noopener" keeps the new tab from controlling this page.
+  WHY WE NEED IT: The credit line has two links (the photographer and Unsplash), so the steps are
+         written once and used twice.
+  LEARNING GAP: Always add rel="noopener" with target="_blank". It's a safety habit for links to other sites.
+*/
+function makeCreditLink(url, text) {
+       const link = document.createElement("a");
+       link.href = url;
+       link.textContent = text;
+       link.target = "_blank";
+       link.rel = "noopener";
+       return link;
+}
+
+/*
+  PLAIN ENGLISH: Fill in the "Style inspiration" photo and its credit once Unsplash answers.
+  LOGIC: 1) Wait for one hand-picked photo from the folder that matches the top's color.
+         2) If none came back, show a friendly note and stop (return).
+         3) Build the photo (img) and the credit line: "Photo by [name] on Unsplash."
+         4) Add a small note, like "Hand-picked look for a blue top."
+         5) Remove the "Finding a photo..." message and show the photo, credit, and note in its place.
+         If anything goes wrong (wrong key, private folder, hourly limit reached, no internet),
+         the message changes to a calm "try again" note, and the outfit card still works.
+  WHY WE NEED IT: Card "Connect Unsplash + photo credit." The proposal promised a real photo of
+         people wearing similar colors under each outfit, with credit to the photographer.
+         Hand-picked folders keep every photo modest and matched to the top's color.
+  LEARNING GAP: Unsplash's rules say the photo must load from THEIR address (photo.imageUrl), and
+         the credit must link to the photographer AND to Unsplash. We do both.
+         alt text comes from Unsplash's own description, so screen reader users hear what's in the photo.
+         loading="lazy" tells the browser to load the photo only when it's about to scroll into view,
+         which keeps the page fast.
+  WHERE THE DATA COMES FROM: getOutfitPhoto in unsplash-api.mjs (my 6 Unsplash collections).
+*/
+async function showInspirationPhoto(box, message, hex) {
+       try {
+              const photo = await getOutfitPhoto(hex);
+
+              if (!photo) {
+                     message.textContent = "No photo found for this color yet. Shuffle again for more.";
+                     return;
+              }
+
+              const image = document.createElement("img");
+              image.className = "inspiration-photo";
+              image.src = photo.imageUrl;
+              image.alt = photo.description;
+              image.loading = "lazy";
+
+              const credit = document.createElement("p");
+              credit.className = "photo-credit";
+              credit.append(
+                     "Photo by ",
+                     makeCreditLink(photo.profileUrl, photo.photographer),
+                     " on ",
+                     makeCreditLink(UNSPLASH_HOME, "Unsplash"),
+              );
+
+              const note = document.createElement("p");
+              note.className = "photo-note";
+              note.textContent = `Hand-picked look for a ${photo.label} top`;
+
+              message.remove();
+              box.append(image, credit, note);
+       } catch (error) {
+              message.textContent = "Style photos are taking a break. Try Shuffle again soon.";
+              console.error(error);
+       }
 }
 
 /*
@@ -253,130 +325,155 @@ async function showColorMix(box, message, hex) {
   LOGIC: Clear the area, then for each outfit make a card with a title ("Outfit 1"),
          the coloring-book drawing, a list of pieces (a color circle, the bin name, the
          color's name, and the color code), a "Colors that go with your top" section,
-         and a Save button. If there are fewer than 3 outfits, add a short note explaining why.
+         a "Style inspiration" photo, and a Save button.
+         If there are fewer than 3 outfits, add a short note explaining why.
   WHY WE NEED IT: The user SEES their outfits, first as a picture, then as exact colors.
   LEARNING GAP: We use textContent, not innerHTML, for text. It's safer, the same as renderCloset.
          The cards show up RIGHT AWAY. The color names and mix fill in a moment later, when
          The Color API answers. That's why showColorName and showColorMix are called without
          await: the page doesn't wait for the internet before showing the outfits.
-  WHERE THE DATA COMES FROM: The outfits made by buildOutfits, plus The Color API.
+  WHERE THE DATA COMES FROM: The outfits made by buildOutfits, plus The Color API and Unsplash.
 */
 export function renderOutfits(container, outfits) {
-    container.innerHTML = "";
+       container.innerHTML = "";
 
-    outfits.forEach((outfit, index) => {
-        const card = document.createElement("article");
-        card.className = "outfit-card";
+       outfits.forEach((outfit, index) => {
+              const card = document.createElement("article");
+              card.className = "outfit-card";
 
-        const heading = document.createElement("h3");
-        heading.textContent = `Outfit ${index + 1}`;
-        card.appendChild(heading);
+              const heading = document.createElement("h3");
+              heading.textContent = `Outfit ${index + 1}`;
+              card.appendChild(heading);
 
-        /*
-          PLAIN ENGLISH: Add the coloring-book drawing under the "Outfit 1" title.
-          LOGIC: drawOutfit builds the picture from this outfit's colors and hands it back.
-                 appendChild puts it in the card BEFORE the list, so the picture comes first.
-          WHY WE NEED IT: Card "Draw coloring book outfit."
-          LEARNING GAP: Order matters. Whatever is appended first shows higher on the card.
-        */
-        card.appendChild(drawOutfit(outfit));
+              /*
+                PLAIN ENGLISH: Add the coloring-book drawing under the "Outfit 1" title.
+                LOGIC: drawOutfit builds the picture from this outfit's colors and hands it back.
+                       appendChild puts it in the card BEFORE the list, so the picture comes first.
+                WHY WE NEED IT: Card "Draw coloring book outfit."
+                LEARNING GAP: Order matters. Whatever is appended first shows higher on the card.
+              */
+              card.appendChild(drawOutfit(outfit));
 
-        const list = document.createElement("ul");
-        list.className = "outfit-pieces";
+              const list = document.createElement("ul");
+              list.className = "outfit-pieces";
 
-        outfit.forEach((item) => {
-            const li = document.createElement("li");
+              outfit.forEach((item) => {
+                     const li = document.createElement("li");
 
-            const swatch = document.createElement("span");
-            swatch.className = "swatch";
-            swatch.style.backgroundColor = item.color;
+                     const swatch = document.createElement("span");
+                     swatch.className = "swatch";
+                     swatch.style.backgroundColor = item.color;
 
-            /*
-              PLAIN ENGLISH: The bin name ("Tops") with the color's name ("Bittersweet") under it.
-              LOGIC: A label span holds both, stacked. The color name starts as "Finding name..."
-                     and showColorName fills it in when The Color API answers.
-              WHY WE NEED IT: Card "Connect the color API." The waiting text is the loading
-                     indicator, so the user knows something is coming.
-              LEARNING GAP: We pass the span itself (colorName) to showColorName, so it knows
-                     exactly WHICH spot to fill in, even with 18 names loading at once.
-            */
-            const label = document.createElement("span");
-            label.className = "piece-label";
+                     /*
+                       PLAIN ENGLISH: The bin name ("Tops") with the color's name ("Bittersweet") under it.
+                       LOGIC: A label span holds both, stacked. The color name starts as "Finding name..."
+                              and showColorName fills it in when The Color API answers.
+                       WHY WE NEED IT: Card "Connect the color API." The waiting text is the loading
+                              indicator, so the user knows something is coming.
+                       LEARNING GAP: We pass the span itself (colorName) to showColorName, so it knows
+                              exactly WHICH spot to fill in, even with 18 names loading at once.
+                     */
+                     const label = document.createElement("span");
+                     label.className = "piece-label";
 
-            const binName = document.createElement("span");
-            binName.className = "piece-bin";
-            binName.textContent = item.bin;
+                     const binName = document.createElement("span");
+                     binName.className = "piece-bin";
+                     binName.textContent = item.bin;
 
-            const colorName = document.createElement("span");
-            colorName.className = "piece-name";
-            colorName.textContent = "Finding name...";
+                     const colorName = document.createElement("span");
+                     colorName.className = "piece-name";
+                     colorName.textContent = "Finding name...";
 
-            label.append(binName, colorName);
+                     label.append(binName, colorName);
 
-            const colorCode = document.createElement("span");
-            colorCode.className = "piece-color";
-            colorCode.textContent = item.color;
+                     const colorCode = document.createElement("span");
+                     colorCode.className = "piece-color";
+                     colorCode.textContent = item.color;
 
-            li.append(swatch, label, colorCode);
-            list.appendChild(li);
+                     li.append(swatch, label, colorCode);
+                     list.appendChild(li);
 
-            showColorName(colorName, item.color);
-        });
+                     showColorName(colorName, item.color);
+              });
 
-        card.appendChild(list);
+              card.appendChild(list);
 
-        /*
-          PLAIN ENGLISH: The "Colors that go with your top" section at the bottom of each card.
-          LOGIC: find() gets this outfit's top. The section starts with a "Finding colors..."
-                 message, and showColorMix swaps in the color ideas when The Color API answers.
-          WHY WE NEED IT: The proposal's "creative color mixes" function.
-          LEARNING GAP: Every outfit always has a top (REQUIRED_BINS), so find() never comes back empty here.
-        */
-        const top = outfit.find((item) => item.bin === "Tops");
+              /*
+                PLAIN ENGLISH: The "Colors that go with your top" section at the bottom of each card.
+                LOGIC: find() gets this outfit's top. The section starts with a "Finding colors..."
+                       message, and showColorMix swaps in the color ideas when The Color API answers.
+                WHY WE NEED IT: The proposal's "creative color mixes" function.
+                LEARNING GAP: Every outfit always has a top (REQUIRED_BINS), so find() never comes back empty here.
+              */
+              const top = outfit.find((item) => item.bin === "Tops");
 
-        const mix = document.createElement("section");
-        mix.className = "color-mix";
+              const mix = document.createElement("section");
+              mix.className = "color-mix";
 
-        const mixTitle = document.createElement("h4");
-        mixTitle.textContent = "Colors that go with your top";
+              const mixTitle = document.createElement("h4");
+              mixTitle.textContent = "Colors that go with your top";
 
-        const mixMessage = document.createElement("p");
-        mixMessage.className = "color-mix-message";
-        mixMessage.textContent = "Finding colors...";
+              const mixMessage = document.createElement("p");
+              mixMessage.className = "color-mix-message";
+              mixMessage.textContent = "Finding colors...";
 
-        mix.append(mixTitle, mixMessage);
-        card.appendChild(mix);
+              mix.append(mixTitle, mixMessage);
+              card.appendChild(mix);
 
-        showColorMix(mix, mixMessage, top.color);
+              showColorMix(mix, mixMessage, top.color);
 
-        /*
-          PLAIN ENGLISH: Add the Save button at the bottom of each outfit card.
-          LOGIC: makeSaveButton (favorites.mjs) builds the button. "index" (0, 1, or 2) tells it
-                 which outfit it belongs to. It already shows "Saved" if this outfit was saved before.
-          WHY WE NEED IT: Card "Save favorites." The wireframe shows a Save button on every outfit.
-          LEARNING GAP: The click is handled in shuffle-main.js with ONE listener on the whole
-                 outfit area (event delegation), not one listener per button.
-        */
-        card.appendChild(makeSaveButton(outfit, index));
+              /*
+                PLAIN ENGLISH: The "Style inspiration" section: a hand-picked Unsplash photo for the top's color.
+                LOGIC: The section starts with a "Finding a photo..." message. showInspirationPhoto swaps in
+                       the photo and credit when Unsplash answers. It's called without await, so the card
+                       shows right away, the same as the color names and color mix.
+                WHY WE NEED IT: Card "Connect Unsplash + photo credit."
+                LEARNING GAP: It reuses the .color-mix class for the same thin line and spacing on top.
+                       The extra class name (.inspiration) makes this section easy to find in DevTools.
+              */
+              const inspiration = document.createElement("section");
+              inspiration.className = "color-mix inspiration";
 
-        container.appendChild(card);
-    });
+              const inspirationTitle = document.createElement("h4");
+              inspirationTitle.textContent = "Style inspiration";
 
-    /*
-      PLAIN ENGLISH: If the closet could only make 1 or 2 different outfits, explain why.
-      LOGIC: Compare how many outfits we made to OUTFIT_COUNT (3).
-             The word changes: "1 different outfit is" vs "2 different outfits are."
-      WHY WE NEED IT: Without a note, fewer than 3 cards could look like a bug.
-      LEARNING GAP: The ? : is a short if/else (called a "ternary"):
-             condition ? valueIfTrue : valueIfFalse.
-    */
-    if (outfits.length < OUTFIT_COUNT) {
-        const note = document.createElement("p");
-        note.className = "outfit-note";
-        const words = outfits.length === 1 ? "different outfit is" : "different outfits are";
-        note.textContent = `Only ${outfits.length} ${words} possible right now. Add more clothes for more variety.`;
-        container.appendChild(note);
-    }
+              const inspirationMessage = document.createElement("p");
+              inspirationMessage.className = "color-mix-message";
+              inspirationMessage.textContent = "Finding a photo...";
+
+              inspiration.append(inspirationTitle, inspirationMessage);
+              card.appendChild(inspiration);
+
+              showInspirationPhoto(inspiration, inspirationMessage, top.color);
+
+              /*
+                PLAIN ENGLISH: Add the Save button at the bottom of each outfit card.
+                LOGIC: makeSaveButton (favorites.mjs) builds the button. "index" (0, 1, or 2) tells it
+                       which outfit it belongs to. It already shows "Saved" if this outfit was saved before.
+                WHY WE NEED IT: Card "Save favorites." The wireframe shows a Save button on every outfit.
+                LEARNING GAP: The click is handled in shuffle-main.js with ONE listener on the whole
+                       outfit area (event delegation), not one listener per button.
+              */
+              card.appendChild(makeSaveButton(outfit, index));
+
+              container.appendChild(card);
+       });
+
+       /*
+         PLAIN ENGLISH: If the closet could only make 1 or 2 different outfits, explain why.
+         LOGIC: Compare how many outfits we made to OUTFIT_COUNT (3).
+                The word changes: "1 different outfit is" vs "2 different outfits are."
+         WHY WE NEED IT: Without a note, fewer than 3 cards could look like a bug.
+         LEARNING GAP: The ? : is a short if/else (called a "ternary"):
+                condition ? valueIfTrue : valueIfFalse.
+       */
+       if (outfits.length < OUTFIT_COUNT) {
+              const note = document.createElement("p");
+              note.className = "outfit-note";
+              const words = outfits.length === 1 ? "different outfit is" : "different outfits are";
+              note.textContent = `Only ${outfits.length} ${words} possible right now. Add more clothes for more variety.`;
+              container.appendChild(note);
+       }
 }
 
 /*
@@ -387,16 +484,16 @@ export function renderOutfits(container, outfits) {
          The message uses the .empty class, so it gets the same calm box style.
 */
 export function renderMissingMessage(container, missingBins) {
-    container.innerHTML = "";
+       container.innerHTML = "";
 
-    const message = document.createElement("p");
-    message.className = "empty";
-    message.textContent = `Add at least one item to: ${missingBins.join(", ")}. `;
+       const message = document.createElement("p");
+       message.className = "empty";
+       message.textContent = `Add at least one item to: ${missingBins.join(", ")}. `;
 
-    const link = document.createElement("a");
-    link.href = "index.html";
-    link.textContent = "Go to My Closet";
+       const link = document.createElement("a");
+       link.href = "index.html";
+       link.textContent = "Go to My Closet";
 
-    message.appendChild(link);
-    container.appendChild(message);
+       message.appendChild(link);
+       container.appendChild(message);
 }

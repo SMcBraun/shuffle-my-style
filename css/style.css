@@ -1131,3 +1131,180 @@ footer {
         transform: none;
     }
 }
+
+/* ==================== SPARKLE ANIMATION ==================== */
+
+/*
+  PLAIN ENGLISH: After Shuffle, each outfit card "pops" up into place, one after another,
+         like cards being dealt on a table.
+  LOGIC: @keyframes card-pop describes the movement: start invisible (opacity 0), a little lower
+         (translateY 16px) and a little smaller (scale 0.97), then end fully visible in its normal spot.
+         "both" keeps the starting look BEFORE the animation begins, so cards don't flash early.
+         nth-child(2) and nth-child(3) wait a little longer (animation-delay), so the cards
+         arrive one at a time instead of all at once.
+  WHY WE NEED IT: Card "Sparkle animation." The proposal's "magic closet" feeling: outfits appear
+         like a fairy godmother is putting them together. It's also a real CSS animation for the
+         Advanced CSS rubric.
+  LEARNING GAP: A TRANSITION smoothly changes between two states when something happens (like hover).
+         An ANIMATION is a planned sequence (@keyframes) that plays on its own.
+         The animation replays on every Shuffle because renderOutfits builds NEW cards each time,
+         and new elements always play their animation.
+         "#outfit-list" in front means ONLY the shuffled cards pop. The saved cards don't, so they
+         won't bounce every time you click "Wore it today."
+  WHERE THE DATA COMES FROM: No data. This only animates the cards shuffle.mjs builds.
+*/
+@keyframes card-pop {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#outfit-list .outfit-card {
+    animation: card-pop 0.5s ease-out both;
+}
+
+#outfit-list .outfit-card:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+#outfit-list .outfit-card:nth-child(3) {
+    animation-delay: 0.24s;
+}
+
+/*
+  PLAIN ENGLISH: Little sparkles (✦ ✧ ✦) twinkle next to each "OUTFIT 1" title, then settle in place.
+  LOGIC: ::after adds the sparkles after the title text, with no change to the HTML.
+         position: absolute with right: 0 tucks them at the right end of the title line.
+         @keyframes sparkle-twinkle grows them from tiny to a little too big, then settles them
+         at normal size, with a small wiggle (rotate) for a magical feel.
+  WHY WE NEED IT: Card "Sparkle animation." The sparkles are the "magic wand" from the app's
+         icon idea, so the brand shows up right where the outfits appear.
+  LEARNING GAP: The h3 needs position: relative so the sparkles are placed inside the TITLE,
+         not somewhere else on the page.
+         The second content line, with / "", gives the sparkles empty "alt text," so screen readers
+         skip them. They're decoration, and hearing "black four-pointed star" three times on every
+         card would be annoying. Browsers that don't understand the / "" part keep the first line.
+*/
+#outfit-list .outfit-card h3 {
+    position: relative;
+}
+
+#outfit-list .outfit-card h3::after {
+    content: "✦ ✧ ✦";
+    content: "✦ ✧ ✦" / "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--coral);
+    letter-spacing: 0.2em;
+    animation: sparkle-twinkle 1.2s ease-in-out 0.3s both;
+}
+
+@keyframes sparkle-twinkle {
+    0% {
+        opacity: 0;
+        transform: scale(0.4) rotate(-20deg);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1.25) rotate(10deg);
+    }
+
+    70% {
+        transform: scale(0.9) rotate(-5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/*
+  PLAIN ENGLISH: If someone turned off animations in their device settings, skip the pop and the twinkle.
+  LOGIC: animation: none turns them off. The cards and sparkles still show up, just instantly.
+  WHY WE NEED IT: Some people get dizzy from motion. Respecting this setting is professional,
+         accessible design, the same as the other buttons in this file.
+  LEARNING GAP: Every NEW animation needs this, not just the old ones. Forgetting it is a common
+         accessibility mistake that ESLint and validators won't catch for you.
+*/
+@media (prefers-reduced-motion: reduce) {
+
+    #outfit-list .outfit-card,
+    #outfit-list .outfit-card h3::after {
+        animation: none;
+    }
+}
+
+/* ==================== UNSPLASH: STYLE INSPIRATION PHOTO ==================== */
+
+/*
+  PLAIN ENGLISH: The real outfit photo from Unsplash, near the bottom of each outfit card.
+  LOGIC: width: 100% fills the card. A set height keeps all 3 cards even.
+         object-fit: cover fills that space without stretching the photo (it trims the edges instead).
+         Rounded corners and a thin warm border match the chic card style.
+         The cream background shows while the photo is still loading.
+  WHY WE NEED IT: Card "Connect Unsplash + photo credit." The photo shows real people wearing
+         colors like the user's top, the inspiration the proposal promised.
+  LEARNING GAP: Without object-fit: cover, a tall photo squeezed into this box would look squished.
+         "cover" is like a picture frame that trims the edges instead of bending the picture.
+  WHERE THE DATA COMES FROM: The photo address Unsplash sends back (urls.small).
+*/
+.inspiration-photo {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 1rem;
+    border: 1px solid var(--border-soft);
+    background-color: var(--light);
+}
+
+/*
+  PLAIN ENGLISH: The credit line under the photo: "Photo by [name] on Unsplash."
+  LOGIC: Small, readable --muted gray text. The links are charcoal with a coral underline,
+         the same look as the "Go to My Closet" link.
+  WHY WE NEED IT: Unsplash's rules require crediting the photographer and Unsplash, with links.
+         It's also the right thing to do: the photographer made the photo.
+  LEARNING GAP: A credit should be easy to find but quiet. It supports the photo without competing with it.
+  WHERE THE DATA COMES FROM: The photographer's name and profile link from the Unsplash answer.
+*/
+.photo-credit {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.photo-credit a {
+    color: var(--dark);
+    font-weight: 600;
+    text-decoration-color: var(--coral);
+    text-underline-offset: 3px;
+}
+
+.photo-credit a:focus-visible {
+    outline: 2px solid var(--turquoise);
+    outline-offset: 2px;
+}
+
+/*
+  PLAIN ENGLISH: A tiny note saying which color word was searched, like "Searched for: red."
+  LOGIC: Even smaller gray text, under the credit.
+  WHY WE NEED IT: Unsplash only knows 11 color words, so a coral top searches "red." The note
+         explains why the photo's color is close but not exact, so it doesn't look like a mistake.
+  LEARNING GAP: Telling users WHY something happens builds trust, the same idea as the
+         "Only 1 different outfit is possible" note.
+*/
+.photo-note {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+}
