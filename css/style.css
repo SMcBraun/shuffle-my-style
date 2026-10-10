@@ -1361,3 +1361,111 @@ footer {
     font-weight: 600;
     color: var(--muted);
 }
+
+/* ==================== MAGIC WAND CURSOR + SPARKLE TRAIL (BOTH PAGES) ==================== */
+
+/*
+  PLAIN ENGLISH: Turn the mouse pointer into a little magic wand with a sunny star on its tip.
+  LOGIC: cursor: url(...) uses a picture as the pointer. The picture is a tiny SVG drawing written
+         right inside the CSS (a "data URL"), so there's no extra image file to load.
+         "7 7" is the hotspot: the exact spot that clicks, which is the center of the star.
+         "auto" is the backup. If the wand can't load, the browser shows its normal arrow.
+  WHY WE NEED IT: Trello card "Polish: Magic wand cursor + sparkle trail." It matches the app's
+         fairy-godmother idea.
+  LEARNING GAP: Buttons and links still show the pointing hand (their own "cursor: pointer" rules),
+         so users always know what's clickable. Inside a data URL, # must be written as %23,
+         so the color #ffd23f is written %23ffd23f.
+*/
+body {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='11' y1='11' x2='29' y2='29' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='11' y1='11' x2='29' y2='29' stroke='%232b2b2b' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='11' y1='11' x2='15' y2='15' stroke='%23ff6f61' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M7 1 L8.8 5.2 L13 7 L8.8 8.8 L7 13 L5.2 8.8 L1 7 L5.2 5.2 Z' fill='%23ffd23f' stroke='%232b2b2b' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") 7 7, auto;
+}
+
+/*
+  PLAIN ENGLISH: How each sparkle looks: a big, glowing star placed exactly at the mouse.
+  LOGIC: position: fixed + left/top (set by sparkle-trail.mjs) puts it at the mouse's spot.
+         translate(-50%, -50%) centers the star on that spot. pointer-events: none lets clicks
+         pass right through it. z-index: 9999 keeps it on top of everything.
+         font-size 1.6rem makes the stars big enough to notice. The animation lasts 1.2 seconds.
+  WHY WE NEED IT: The JavaScript makes the sparkles. This CSS decides how they look and move.
+  LEARNING GAP: Without pointer-events: none, a sparkle under the mouse would "catch" the click,
+         and buttons would seem broken.
+  WHERE THE DATA COMES FROM: The spans made by js/sparkle-trail.mjs.
+*/
+.trail-sparkle {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    transform: translate(-50%, -50%);
+    text-shadow:
+        0 0 1px var(--dark),
+        0 0 8px currentColor;
+    animation: trail-fade 1.2s ease-out forwards;
+}
+
+/*
+  PLAIN ENGLISH: The 3 sparkle colors, using the app's own color variables.
+  LOGIC: sparkle-trail.mjs picks one of these class names at random. The text-shadow above uses
+         "currentColor," so each star glows in its OWN color.
+  WHY WE NEED IT: The sparkles match the coral, turquoise, and sunny look of the whole app.
+  LEARNING GAP: The thin dark edge (0 0 1px var(--dark)) is what makes light colors, like sunny
+         yellow, stand out on the white cards and cream background.
+*/
+.trail-coral {
+    color: var(--coral);
+}
+
+.trail-turquoise {
+    color: var(--turquoise);
+}
+
+.trail-sunny {
+    color: var(--sunny);
+}
+
+/*
+  PLAIN ENGLISH: The sparkle's little dance: it pops in, twinkles bigger, then drifts down,
+         spins, shrinks, and fades away.
+  LOGIC: Percent steps are points in time. 0% is the start, 25% is a quarter of the way through,
+         60% is past halfway, and 100% is the end. The star stays fully visible until 60%,
+         so you can really see it, and only fades during the last part.
+         "forwards" keeps it at the end so it doesn't blink back.
+  WHY WE NEED IT: When this animation ends, the browser fires "animationend," and
+         sparkle-trail.mjs deletes the span.
+  LEARNING GAP: calc(-50% + 30px) means "keep it centered, then move 30px down." The 30px is the drift.
+         from/to only has 2 steps. Percent steps let you add as many as you want.
+*/
+@keyframes trail-fade {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.25) rotate(20deg);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate(-50%, calc(-50% + 12px)) scale(1) rotate(60deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 30px)) scale(0.4) rotate(120deg);
+    }
+}
+
+/*
+  PLAIN ENGLISH: A backup for people who turned off motion: hide any sparkles.
+  LOGIC: sparkle-trail.mjs already skips the sparkles for these users. This is a second safety net.
+  WHY WE NEED IT: Same respectful, accessible design as the other motion settings.
+  LEARNING GAP: The wand cursor stays, because a still picture isn't motion.
+*/
+@media (prefers-reduced-motion: reduce) {
+    .trail-sparkle {
+        display: none;
+    }
+}
